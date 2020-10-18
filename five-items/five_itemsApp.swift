@@ -6,12 +6,22 @@
 //
 
 import SwiftUI
+import Firebase
+
+public var testMode = true
 
 @main
 struct five_itemsApp: App {
+    
+    var userInfo : UserInfo = UserInfo()
+    
+    init() {
+        FirebaseApp.configure()
+    }
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView().environmentObject(userInfo)
         }
     }
 }

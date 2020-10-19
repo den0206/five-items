@@ -7,11 +7,13 @@
 
 import Foundation
 
-struct FBUser : Hashable {
+struct FBUser  {
     let uid : String
     var name : String
     var email : String
     var avaterUrl : URL?
+    
+    var items : [Item?] = Array(repeating: nil, count: 5)
     
     
     init(uid : String, name : String, email : String) {

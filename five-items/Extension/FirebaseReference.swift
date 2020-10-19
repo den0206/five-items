@@ -11,6 +11,7 @@ import FirebaseFirestore
 
 enum References : String {
     case Users
+    case Items
 
 }
 

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class AddItemViewModel : ObservableObject {
     
@@ -39,6 +40,15 @@ class AddItemViewModel : ObservableObject {
             return "画像を選択してください"
         }
     }
+    
+    func velidUrl (urlString: String?) -> Bool {
+       if let urlString = urlString {
+           if let url = NSURL(string: urlString) {
+               return UIApplication.shared.canOpenURL(url as URL)
+           }
+       }
+       return false
+   }
     
     
     

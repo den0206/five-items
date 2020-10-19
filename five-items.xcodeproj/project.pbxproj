@@ -17,6 +17,7 @@
 		3A40F572253C05EA009B5A39 /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A40F571253C05EA009B5A39 /* AddItemView.swift */; };
 		3A40F576253C0BD4009B5A39 /* Global Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A40F575253C0BD4009B5A39 /* Global Extensions.swift */; };
 		3A40F579253C19AE009B5A39 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A40F578253C19AE009B5A39 /* Item.swift */; };
+		3A427FB8253C74FF00016030 /* FBItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A427FB7253C74FF00016030 /* FBItem.swift */; };
 		3A6979CA253A7E79004554A6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A6979C9253A7E79004554A6 /* GoogleService-Info.plist */; };
 		3AC023F2253ACD91000B01E7 /* FirebaseReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC023F1253ACD91000B01E7 /* FirebaseReference.swift */; };
 		3AC023F5253AD71C000B01E7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC023F4253AD71C000B01E7 /* HomeView.swift */; };
@@ -41,6 +42,7 @@
 		3A40F571253C05EA009B5A39 /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
 		3A40F575253C0BD4009B5A39 /* Global Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Extensions.swift"; sourceTree = "<group>"; };
 		3A40F578253C19AE009B5A39 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		3A427FB7253C74FF00016030 /* FBItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBItem.swift; sourceTree = "<group>"; };
 		3A6979C9253A7E79004554A6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3AC023F1253ACD91000B01E7 /* FirebaseReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseReference.swift; sourceTree = "<group>"; };
 		3AC023F4253AD71C000B01E7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				3A393920253ABC0600DE670B /* FBAuth.swift */,
+				3A427FB7253C74FF00016030 /* FBItem.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -320,6 +323,7 @@
 				3AC70B0B253A7BE200FBD148 /* five_itemsApp.swift in Sources */,
 				3AC023F5253AD71C000B01E7 /* HomeView.swift in Sources */,
 				3AC1FFC2253A9BFB0059E3E9 /* LoginView.swift in Sources */,
+				3A427FB8253C74FF00016030 /* FBItem.swift in Sources */,
 				3A16003E253BE80700067CC6 /* EditView.swift in Sources */,
 				3AC8FBA5253A93C50043543D /* RootView.swift in Sources */,
 				3A40F572253C05EA009B5A39 /* AddItemView.swift in Sources */,

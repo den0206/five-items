@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct AddItemView: View {
     
-    var index : Int
+    @Binding var  index : Int
     
     @EnvironmentObject var userInfo : UserInfo
     @StateObject private var itemModel = AddItemViewModel()
@@ -96,7 +97,9 @@ struct AddItemView: View {
                     
                     VStack(spacing : 20) {
                         
-                        Button(action: {}) {
+                        Button(action: {
+                            addItem()
+                        }) {
                             Text("追加する")
                                 .foregroundColor(.white)
                                 .padding(.vertical,15)
@@ -113,8 +116,11 @@ struct AddItemView: View {
                 }.frame(maxWidth: .infinity)
                 .padding(.top,30)
             })
+            .alert(isPresented: $showAlert, content: {
+                Alert(title: Text("Error"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
+            })
             
-            .navigationTitle("アイテム\(index)を追加")
+            .navigationTitle("アイテム\(index + 1)を追加")
             .navigationBarItems(trailing: Button(action: {
                 self.presentationMode.wrappedValue.dismiss()
                 
@@ -128,3 +134,44 @@ struct AddItemView: View {
     }
 }
 
+extension AddItemView {
+    
+    func addItem() {
+        
+        var relationUrl : String?
+        var description : String?
+        
+        if itemModel.url != "" {
+            
+            if itemModel.velidUrl(urlString: itemModel.url) {
+                relationUrl = itemModel.url
+            } else {
+                errorMessage = "URLの書式が間違っています"
+                showAlert = true
+                return
+            }
+        }
+        
+        if itemModel.description != "" {
+            description = itemModel.description
+        }
+        
+        FBItem.registrationItem(index : index,name: itemModel.name, urlString: relationUrl, imageData: itemModel.imageData, description: description, userId: userInfo.user.uid) { (result) in
+            
+            switch result {
+            
+            case .success(let item):
+                print("success")
+                self.userInfo.user.items[index] = item
+                print(userInfo.user.items)
+                self.presentationMode.wrappedValue.dismiss()
+
+            case .failure(let error):
+                errorMessage = error.localizedDescription
+                showAlert = true
+            }
+        }
+    }
+    
+
+}

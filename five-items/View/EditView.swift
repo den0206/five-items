@@ -10,7 +10,7 @@ import SwiftUI
 struct EditView: View {
     
     @State private var showSheet = false
-    @State private var selectedIndex = 1
+    @State private var selectedIndex = 0
     
     var body: some View {
         
@@ -20,17 +20,17 @@ struct EditView: View {
                 VStack(spacing : 40) {
                     
                     HStack {
+                        AddRecButton(showSheet: $showSheet, selectedIndex: $selectedIndex, index: 0)
+                    }
+                    
+                    HStack(spacing : 40) {
                         AddRecButton(showSheet: $showSheet, selectedIndex: $selectedIndex, index: 1)
+                        AddRecButton(showSheet: $showSheet, selectedIndex: $selectedIndex,index: 2)
                     }
                     
                     HStack(spacing : 40) {
-                        AddRecButton(showSheet: $showSheet, selectedIndex: $selectedIndex, index: 2)
                         AddRecButton(showSheet: $showSheet, selectedIndex: $selectedIndex,index: 3)
-                    }
-                    
-                    HStack(spacing : 40) {
                         AddRecButton(showSheet: $showSheet, selectedIndex: $selectedIndex,index: 4)
-                        AddRecButton(showSheet: $showSheet, selectedIndex: $selectedIndex,index: 5)
                     }
                     
                 }
@@ -41,9 +41,10 @@ struct EditView: View {
             }
             .navigationBarTitle("アイテム", displayMode: .inline)
             .sheet(isPresented: $showSheet) {
-                AddItemView(index: selectedIndex)
+                AddItemView(index: $selectedIndex)
             }
         }
+        
     }
 }
 

@@ -58,5 +58,38 @@ struct FBItem  {
         
         
     }
+    
+    
+    static func fetchUserItems(user : FBUser, completion :  @escaping(Result<[Item?], Error>) -> Void) {
+        
+        var items : [Item?] = Array(repeating: nil, count: 5)
+        
+        let ref = firebaseReference(.Users).document(user.uid).collection(kITEMS)
+        
+            ref.getDocuments { (snapshot, error) in
+            
+            guard let snapshot = snapshot else {
+                completion(.failure(FirestoreError.noSnapshotData))
+                return
+            }
+            
+            guard !snapshot.isEmpty else {
+                completion(.failure(FirestoreError.emptySnapshot))
+                return
+            }
+            
+                snapshot.documents.forEach { (doc) in
+                    
+                    let data = doc.data()
+                    guard let item = Item(dic: data) else {return}
+                    
+                    items[item.index] = item
+                    
+                    
+                }
+                
+                completion(.success(items))
+        }
+    }
 }
 

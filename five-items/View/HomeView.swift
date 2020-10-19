@@ -14,7 +14,8 @@ import SDWebImageSwiftUI
 struct HomeView: View {
     
     @EnvironmentObject var userInfo : UserInfo
-
+    
+    @State private var firstLoad = true
     
     var body: some View {
         
@@ -60,19 +61,36 @@ struct HomeView: View {
         }
         .onAppear {
             
-            guard let uid = Auth.auth().currentUser?.uid else {return}
-            
-                FBAuth.fecthFBUser(uid: uid) { (result) in
-                    switch result {
-                    
-                    case .success(let user):
-                        self.userInfo.user = user
-                        print(user)
-                    case .failure(let error):
-                        print(error.localizedDescription)
+            if firstLoad {
+                guard let uid = Auth.auth().currentUser?.uid else {return}
+                
+                    FBAuth.fecthFBUser(uid: uid) { (result) in
+                        switch result {
+                        
+                        case .success(let user):
+                            self.userInfo.user = user
+                            
+                            FBItem.fetchUserItems(user: user) { (result) in
+                                
+                                switch result {
+                                
+                                case .success(let items):
+                                    
+                                    self.userInfo.user.items = items
+                                    print(userInfo.user)
+                                case .failure(let error):
+                                    print(error.localizedDescription)
+                                }
+                            }
+                           
+                        case .failure(let error):
+                            print(error.localizedDescription)
+                        }
                     }
-                }
-            
+                
+                firstLoad = false
+            }
+          
           
             
             

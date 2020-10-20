@@ -15,6 +15,8 @@ class AddItemViewModel : ObservableObject {
     @Published var imageData : Data = .init(count : 0)
     @Published var description = ""
     
+    @Published var editItem : Item?
+    
     @Published var showPL = true
     @Published var showPicker = false
     
@@ -25,6 +27,17 @@ class AddItemViewModel : ObservableObject {
         }
         
         return true
+    }
+    
+    var didChangeStatus : Bool {
+        
+        guard let editItem = editItem else {return false}
+        
+        if editItem.name != name ||  editItem.description != description  || !(self.imageData == .init(count :0)){
+            return true
+        }
+        
+        return false
     }
     
     //MARK: - Validation func
@@ -38,6 +51,15 @@ class AddItemViewModel : ObservableObject {
             return ""
         } else {
             return "画像を選択してください"
+        }
+    }
+    
+    var validNameText : String {
+        
+        if !isEmpty(_field: name) {
+            return ""
+        } else {
+            return "名前を入力してください"
         }
     }
     

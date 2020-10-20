@@ -8,10 +8,6 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-enum ButtonType {
-    case new
-    case edit
-}
 
 enum EditViewSheet : Identifiable {
     case new, edit
@@ -23,11 +19,12 @@ enum EditViewSheet : Identifiable {
 
 struct EditView: View {
     
-  
-    
+    @EnvironmentObject var userInfo : UserInfo
+
     @State private var showSheet = false
     @State private var selectedIndex = 0
     @State private var sheetType : EditViewSheet?
+    
     
     var body: some View {
         
@@ -63,7 +60,14 @@ struct EditView: View {
                 case .new :
                     AddItemView(index: $selectedIndex)
                 case .edit :
-                    Text("Edit")
+                    
+                    if let item = userInfo.user.items[selectedIndex] {
+                        
+                        EditItemView(item: item)
+                    } else {
+                        Text("No Item \(selectedIndex)")
+                    }
+                    
                 }
             }
         }

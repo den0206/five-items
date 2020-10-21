@@ -31,16 +31,18 @@ struct UsersView: View {
                     
                     NavigationLink(destination: Text(vm.users[i].name)) {
                         UserCell(user: $vm.users[i])
-                            .padding()
+                            .padding(4)
                     }
                     
                 }
                 
-                
+                Spacer()
+
             }
-            .padding(.vertical, 20)
+            .padding(.vertical,8)
             .navigationBarTitle("Users", displayMode: .inline)
             .navigationViewStyle(StackNavigationViewStyle())
+            
             
         
         }

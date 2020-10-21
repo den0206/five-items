@@ -219,3 +219,42 @@ struct FBItem  {
     }
 }
 
+extension FBItem {
+    
+    static func fetchAllitems(userId : String, completion :  @escaping(Result<[Item], Error>) -> Void) {
+        
+        var items = [Item]()
+        
+        Firestore.firestore().collectionGroup(kITEMS).order(by: kDATE, descending: true).getDocuments { (snapshot, error) in
+            
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let snapshot = snapshot else {
+                completion(.failure(FirestoreError.noDocumentSNapshot))
+                return}
+            
+            guard !snapshot.isEmpty else {
+                completion(.failure(FirestoreError.emptySnapshot))
+                return}
+            
+            snapshot.documents.forEach { (doc) in
+                
+                let data = doc.data()
+                guard let item = Item(dic: data) else {
+                    completion(.failure(FirestoreError.noUser))
+                    return
+                }
+                
+                if item.userId != userId {
+                    items.append(item)
+                }
+            }
+            
+            completion(.success(items))
+        }
+    }
+}
+

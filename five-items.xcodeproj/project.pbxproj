@@ -15,6 +15,8 @@
 		3A393921253ABC0600DE670B /* FBAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A393920253ABC0600DE670B /* FBAuth.swift */; };
 		3A393944253ABE5800DE670B /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A393943253ABE5800DE670B /* Downloader.swift */; };
 		3A39396A253AC62B00DE670B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A393969253AC62B00DE670B /* Constants.swift */; };
+		3A3BE8C7254070A60054C985 /* ItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3BE8C6254070A60054C985 /* ItemsView.swift */; };
+		3A3BE8CB254071AF0054C985 /* ItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3BE8CA254071AF0054C985 /* ItemsViewModel.swift */; };
 		3A3CAD02FE9C2E981C04BD35 /* Pods_five_items.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5BBD06DA701F15AE144E5DC /* Pods_five_items.framework */; };
 		3A40F56F253C053F009B5A39 /* AddItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A40F56E253C053F009B5A39 /* AddItemViewModel.swift */; };
 		3A40F572253C05EA009B5A39 /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A40F571253C05EA009B5A39 /* AddItemView.swift */; };
@@ -45,6 +47,8 @@
 		3A393920253ABC0600DE670B /* FBAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBAuth.swift; sourceTree = "<group>"; };
 		3A393943253ABE5800DE670B /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		3A393969253AC62B00DE670B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		3A3BE8C6254070A60054C985 /* ItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsView.swift; sourceTree = "<group>"; };
+		3A3BE8CA254071AF0054C985 /* ItemsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsViewModel.swift; sourceTree = "<group>"; };
 		3A40F56E253C053F009B5A39 /* AddItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemViewModel.swift; sourceTree = "<group>"; };
 		3A40F571253C05EA009B5A39 /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
 		3A40F575253C0BD4009B5A39 /* Global Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Extensions.swift"; sourceTree = "<group>"; };
@@ -170,6 +174,7 @@
 				3AC1FFC0253A9BE20059E3E9 /* Auth */,
 				3A160038253BE69F00067CC6 /* MainTabView.swift */,
 				3AC023F4253AD71C000B01E7 /* HomeView.swift */,
+				3A3BE8C6254070A60054C985 /* ItemsView.swift */,
 				3A16003D253BE80700067CC6 /* EditView.swift */,
 				3A15E826253FE66A001F8D7A /* UsersView.swift */,
 				3A40F571253C05EA009B5A39 /* AddItemView.swift */,
@@ -185,6 +190,7 @@
 				3AC1FFC4253A9C8F0059E3E9 /* UserViewModel.swift */,
 				3A40F56E253C053F009B5A39 /* AddItemViewModel.swift */,
 				3A15E82A253FE855001F8D7A /* UsersViewModel.swift */,
+				3A3BE8CA254071AF0054C985 /* ItemsViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -328,6 +334,7 @@
 				3AC1FFC5253A9C8F0059E3E9 /* UserViewModel.swift in Sources */,
 				3AC8FBB1253A94960043543D /* FBUser.swift in Sources */,
 				3A15E827253FE66A001F8D7A /* UsersView.swift in Sources */,
+				3A3BE8C7254070A60054C985 /* ItemsView.swift in Sources */,
 				3AC1FFC8253AA3320059E3E9 /* SignUpView.swift in Sources */,
 				3AC023F2253ACD91000B01E7 /* FirebaseReference.swift in Sources */,
 				3A39396A253AC62B00DE670B /* Constants.swift in Sources */,
@@ -340,6 +347,7 @@
 				3AC1FFC2253A9BFB0059E3E9 /* LoginView.swift in Sources */,
 				3A427FB8253C74FF00016030 /* FBItem.swift in Sources */,
 				3A16003E253BE80700067CC6 /* EditView.swift in Sources */,
+				3A3BE8CB254071AF0054C985 /* ItemsViewModel.swift in Sources */,
 				3AC8FBA5253A93C50043543D /* RootView.swift in Sources */,
 				3AE4B93E253F2009007BB4FE /* EditItemView.swift in Sources */,
 				3A40F572253C05EA009B5A39 /* AddItemView.swift in Sources */,

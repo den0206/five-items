@@ -19,8 +19,8 @@ struct HomeView: View {
         
         NavigationView {
           
-            Text(userInfo.user.name)
-                .navigationTitle("Home")
+            ItemsView()
+                .navigationBarTitle("アイテム", displayMode: .inline)
                 .navigationBarItems(
                     leading :  WebImage(url: userInfo.user.avaterUrl)
                         .resizable()

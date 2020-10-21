@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A15E827253FE66A001F8D7A /* UsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A15E826253FE66A001F8D7A /* UsersView.swift */; };
+		3A15E82B253FE855001F8D7A /* UsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A15E82A253FE855001F8D7A /* UsersViewModel.swift */; };
+		3A15E846253FEA57001F8D7A /* FBUserSeavice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A15E845253FEA57001F8D7A /* FBUserSeavice.swift */; };
 		3A160039253BE69F00067CC6 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A160038253BE69F00067CC6 /* MainTabView.swift */; };
 		3A16003E253BE80700067CC6 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A16003D253BE80700067CC6 /* EditView.swift */; };
 		3A393921253ABC0600DE670B /* FBAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A393920253ABC0600DE670B /* FBAuth.swift */; };
@@ -34,6 +37,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3A15E826253FE66A001F8D7A /* UsersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersView.swift; sourceTree = "<group>"; };
+		3A15E82A253FE855001F8D7A /* UsersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersViewModel.swift; sourceTree = "<group>"; };
+		3A15E845253FEA57001F8D7A /* FBUserSeavice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBUserSeavice.swift; sourceTree = "<group>"; };
 		3A160038253BE69F00067CC6 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		3A16003D253BE80700067CC6 /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
 		3A393920253ABC0600DE670B /* FBAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBAuth.swift; sourceTree = "<group>"; };
@@ -88,6 +94,7 @@
 			isa = PBXGroup;
 			children = (
 				3A393920253ABC0600DE670B /* FBAuth.swift */,
+				3A15E845253FEA57001F8D7A /* FBUserSeavice.swift */,
 				3A427FB7253C74FF00016030 /* FBItem.swift */,
 			);
 			path = Service;
@@ -164,6 +171,7 @@
 				3A160038253BE69F00067CC6 /* MainTabView.swift */,
 				3AC023F4253AD71C000B01E7 /* HomeView.swift */,
 				3A16003D253BE80700067CC6 /* EditView.swift */,
+				3A15E826253FE66A001F8D7A /* UsersView.swift */,
 				3A40F571253C05EA009B5A39 /* AddItemView.swift */,
 				3AE4B93D253F2009007BB4FE /* EditItemView.swift */,
 			);
@@ -176,6 +184,7 @@
 				3AC8FBAB253A93FF0043543D /* UserInfo.swift */,
 				3AC1FFC4253A9C8F0059E3E9 /* UserViewModel.swift */,
 				3A40F56E253C053F009B5A39 /* AddItemViewModel.swift */,
+				3A15E82A253FE855001F8D7A /* UsersViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -312,16 +321,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A15E846253FEA57001F8D7A /* FBUserSeavice.swift in Sources */,
 				3A40F56F253C053F009B5A39 /* AddItemViewModel.swift in Sources */,
 				3AC8FBAC253A93FF0043543D /* UserInfo.swift in Sources */,
 				3A393921253ABC0600DE670B /* FBAuth.swift in Sources */,
 				3AC1FFC5253A9C8F0059E3E9 /* UserViewModel.swift in Sources */,
 				3AC8FBB1253A94960043543D /* FBUser.swift in Sources */,
+				3A15E827253FE66A001F8D7A /* UsersView.swift in Sources */,
 				3AC1FFC8253AA3320059E3E9 /* SignUpView.swift in Sources */,
 				3AC023F2253ACD91000B01E7 /* FirebaseReference.swift in Sources */,
 				3A39396A253AC62B00DE670B /* Constants.swift in Sources */,
 				3A160039253BE69F00067CC6 /* MainTabView.swift in Sources */,
 				3A393944253ABE5800DE670B /* Downloader.swift in Sources */,
+				3A15E82B253FE855001F8D7A /* UsersViewModel.swift in Sources */,
 				3A40F579253C19AE009B5A39 /* Item.swift in Sources */,
 				3AC70B0B253A7BE200FBD148 /* five_itemsApp.swift in Sources */,
 				3AC023F5253AD71C000B01E7 /* HomeView.swift in Sources */,

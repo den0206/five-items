@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct FBUser  {
+struct FBUser {
+   
     let uid : String
     var name : String
     var email : String

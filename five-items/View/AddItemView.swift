@@ -163,7 +163,6 @@ extension AddItemView {
             case .success(let item):
                 print("success")
                 self.userInfo.user.items[index] = item
-                print(userInfo.user.items)
                 self.presentationMode.wrappedValue.dismiss()
 
             case .failure(let error):

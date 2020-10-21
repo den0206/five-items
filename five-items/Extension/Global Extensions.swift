@@ -14,7 +14,9 @@ extension String {
     }
 }
 
-
+func hideKeyBord() {
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+}
 
 func isEmpty(_field : String) -> Bool {
     

@@ -11,6 +11,7 @@ import SDWebImageSwiftUI
 struct EditItemView: View {
     
     var item : Item
+    @EnvironmentObject var userInfo : UserInfo
     @StateObject var vm =  AddItemViewModel()
     
     @State private var errorMessage = ""
@@ -66,7 +67,13 @@ struct EditItemView: View {
                     
                     Group {
                         VStack(alignment: .leading) {
+                            
+                            if !vm.validNameText.isEmpty {
+                                Text(vm.validNameText).font(.caption).foregroundColor(.red)
+                            }
+                            
                             HStack {
+                                
                                 TextField("アイテム名", text: $vm.name)
                                     .onAppear {
                                         self.vm.name = item.name
@@ -77,10 +84,6 @@ struct EditItemView: View {
                                     .font(.system(size: 22))
                             }
                             
-                            
-                            if !vm.validNameText.isEmpty {
-                                Text(vm.validNameText).font(.caption).foregroundColor(.red)
-                            }
                         }
                         
                         TextField("関連URL",text : $vm.url)
@@ -108,17 +111,27 @@ struct EditItemView: View {
                     VStack(spacing : 20) {
                         
                         Button(action: {
-//                            addItem()
+                        
+                            editItem()
                         }) {
-                            Text("追加する")
+                            Text("更新する")
                                 .foregroundColor(.white)
                                 .padding(.vertical,15)
                                 .frame(width : 200)
                                 .background(Color.green)
                                 .cornerRadius(8)
-                                .opacity(vm.didChangeStatus ? 1 : 0.7)
+                                .opacity(vm.didChangeStatus && !isEmpty(_field: vm.name) ? 1 : 0.7 )
                         }
-                        .disabled(!vm.didChangeStatus)
+                        .disabled(!vm.didChangeStatus || isEmpty(_field: vm.name))
+                        
+                        Button(action: {print("DELETE")}) {
+                            Text("削除する")
+                                .foregroundColor(.white)
+                                .padding(.vertical,15)
+                                .frame(width: 200)
+                                .background(Color.red)
+                                .cornerRadius(8)
+                        }
                         
                     }.padding()
             
@@ -137,8 +150,43 @@ struct EditItemView: View {
             
         }.onAppear {
             vm.editItem = item
-            print(vm.editItem)
         }
+    }
+}
+
+extension EditItemView {
+    
+    func editItem() {
+        
+        if vm.url != "" {
+            
+            if vm.velidUrl(urlString: vm.url) {
+                _ = vm.url
+            } else {
+                errorMessage = "URLの書式が間違っています"
+                showAlert = true
+                return
+            }
+        }
+        
+        
+        FBItem.editItem(vm: vm, user: userInfo.user) { (result) in
+            
+            switch result {
+            
+            case .success(let item):
+                userInfo.user.items[item.index] = item
+                self.presentationMode.wrappedValue.dismiss()
+
+            case .failure(let error):
+                errorMessage = error.localizedDescription
+                showAlert = true
+            }
+        }
+        
+        
+        
+        
     }
 }
 

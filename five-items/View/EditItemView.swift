@@ -10,13 +10,18 @@ import SDWebImageSwiftUI
 
 struct EditItemView: View {
     
+    enum AleretType {
+        case errorMessage
+        case delete
+    }
+    
     var item : Item
     @EnvironmentObject var userInfo : UserInfo
     @StateObject var vm =  AddItemViewModel()
     
     @State private var errorMessage = ""
     @State private var showAlert = false
-
+    @State private var alertType : AleretType = .errorMessage
     
     @Environment(\.presentationMode) var presentationMode
 
@@ -29,7 +34,11 @@ struct EditItemView: View {
                 VStack(spacing : 20) {
 
                     HStack {
-                        Button(action: {vm.showPicker = true}) {
+                        Button(action: {
+                                alertType = .errorMessage
+                                vm.showPicker = true
+                            
+                        }) {
                             if vm.imageData.count == 0 {
                                 WebImage(url: vm.editItem?.imageUrl)
                                     .resizable()
@@ -59,7 +68,8 @@ struct EditItemView: View {
                     .sheet(isPresented: $vm.showPicker) {
                         ImagePicker(image: $vm.imageData, errorMessage: $errorMessage, showAlert: $showAlert)
                             .alert(isPresented: $showAlert) {
-                                Alert(title: Text("Error"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
+                                return Alert(title: Text("Error"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
+                                
                             }
                     }
                     
@@ -124,13 +134,31 @@ struct EditItemView: View {
                         }
                         .disabled(!vm.didChangeStatus || isEmpty(_field: vm.name))
                         
-                        Button(action: {print("DELETE")}) {
+                        Button(action: {
+                            self.alertType = .delete
+                            self.showAlert = true
+                        }) {
                             Text("削除する")
                                 .foregroundColor(.white)
                                 .padding(.vertical,15)
                                 .frame(width: 200)
                                 .background(Color.red)
                                 .cornerRadius(8)
+                        }
+                        .alert(isPresented: $showAlert) {
+                            switch alertType {
+                            
+                            case .errorMessage:
+                                return  Alert(title: Text("Error"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
+                                
+                            case .delete:
+                                return Alert(title: Text("Delete"), message: Text("\(item.name) を削除しても宜しいでしょうか？"), primaryButton: .cancel(Text("Cancel")), secondaryButton: .destructive(Text("Delete"), action: {
+                                    /// delete   Action
+                                    
+                                    deleteItem()
+
+                                }))
+                            }
                         }
                         
                     }.padding()
@@ -183,10 +211,25 @@ extension EditItemView {
                 showAlert = true
             }
         }
+  
+    }
+    
+    func deleteItem() {
         
-        
-        
-        
+        FBItem.deleteItem(item: item, userId: userInfo.user.uid) { (result) in
+            
+            switch result {
+            
+            case .success(let index):
+                userInfo.user.items[index] = nil
+                self.presentationMode.wrappedValue.dismiss()
+                
+            case .failure(let error):
+                self.alertType = .errorMessage
+                self.errorMessage = error.localizedDescription
+                self.showAlert = true
+            }
+        }
     }
 }
 

@@ -152,6 +152,37 @@ struct FBItem  {
     }
     
     
+    static func deleteItem(item : Item ,userId : String, completion :  @escaping(Result<Int , Error>) -> Void) {
+        
+        guard item.userId == userId else {return}
+        let strogeRef = Storage.storage().reference()
+
+        print("Call")
+        
+        firebaseReference(.Users).document(userId).collection(kITEMS).document(item.id).delete { (error) in
+            
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            /// delete image from storage
+            strogeRef.child("ItemImages").child(userId).child("item\(item.index).jpg").delete { (error) in
+                
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                
+                print("Success Delete Item")
+                
+                completion(.success(item.index))
+            }
+
+        }
+        
+    }
+    
     
     
     

@@ -27,18 +27,14 @@ struct UsersView: View {
                 
                 Divider()
                 
-                List(vm.users.indices , id : \.self) { i in
+                ForEach(vm.users.indices, id : \.self) { i in
                     
                     NavigationLink(destination: Text(vm.users[i].name)) {
-                        
                         UserCell(user: $vm.users[i])
-                        
+                            .padding()
                     }
-                    .buttonStyle(PlainButtonStyle())
                     
-                  
                 }
-                .listStyle(PlainListStyle())
                 
                 
             }
@@ -66,84 +62,89 @@ struct UserCell : View {
     
     var body: some View {
         
-        HStack {
+        VStack {
             
-            if user.items.isEmpty{
-                Rectangle()
-                    .fill(Color(white: 0.95))
-                    .frame(width: 60, height: 60)
-                    .cornerRadius(10)
-                    .shadow(radius: 5)
-                    .overlay(
-                        Text("No Items")
-                            .font(.caption2)
-                            .foregroundColor(.black)
-                    )
+            HStack {
                 
-            } else {
-                ForEach(user.items.compactMap({$0})) { item in
-                    
-                    WebImage(url: item.imageUrl)
-                        .resizable()
-                        .placeholder {
-                            Rectangle()
-                                .fill(Color(white: 0.95))
-                                .overlay(
-                                    ProgressView()
-                                        .foregroundColor(.black)
-                                )
-                            
-                        }
-                        .frame(width: 45, height: 45)
+                if user.items.isEmpty{
+                    Rectangle()
+                        .fill(Color(white: 0.95))
+                        .frame(width: 60, height: 60)
                         .cornerRadius(10)
                         .shadow(radius: 5)
+                        .overlay(
+                            Text("No Items")
+                                .font(.caption2)
+                                .foregroundColor(.black)
+                        )
+                    
+                } else {
+                    ForEach(user.items.compactMap({$0})) { item in
+                        
+                        WebImage(url: item.imageUrl)
+                            .resizable()
+                            .placeholder {
+                                Rectangle()
+                                    .fill(Color(white: 0.95))
+                                    .overlay(
+                                        ProgressView()
+                                            .foregroundColor(.black)
+                                    )
+                                
+                            }
+                            .frame(width: 45, height: 45)
+                            .cornerRadius(10)
+                            .shadow(radius: 5)
+                        
+                    }
                     
                 }
                 
+                Spacer()
+                
+                VStack(spacing : 5) {
+                    
+                    WebImage(url: user.avaterUrl)
+                        .resizable()
+                        .placeholder{
+                            Circle()
+                                .fill(Color.gray)
+                                .overlay(ProgressView()
+                                            .foregroundColor(.white))
+                        }
+                        .frame(width: 55, height: 55)
+                        .clipShape(Circle())
+                        .animation(.easeInOut(duration: 0.5))
+                        .transition(.fade)
+                    
+                    
+                    Text(user.name).font(.caption2)
+                        .foregroundColor(.black)
+                }
+                .padding(.trailing,5)
+               
+               
             }
-            
-            Spacer()
-            
-            VStack(spacing : 5) {
+            .onAppear {
                 
-                WebImage(url: user.avaterUrl)
-                    .resizable()
-                    .placeholder{
-                        Circle()
-                            .fill(Color.gray)
-                            .overlay(ProgressView()
-                                        .foregroundColor(.white))
+                FBItem.fetchUserItems(user: user) { (result) in
+                    
+                    switch result {
+                    
+                    case .success(let items):
+                        user.items = items
+                    case .failure(let error):
+                        if error as! FirestoreError != FirestoreError.emptySnapshot {
+                            print(error.localizedDescription)
+                        }
+                        user.items = [Item?]()
                     }
-                    .frame(width: 55, height: 55)
-                    .clipShape(Circle())
-                    .animation(.easeInOut(duration: 0.5))
-                    .transition(.fade)
-                
-                
-                Text(user.name).font(.caption2)
-                    .foregroundColor(.black)
-            }
-            .padding(.trailing,5)
-           
-           
-        }
-        .padding(.vertical, 5)
-        .onAppear {
-            
-            FBItem.fetchUserItems(user: user) { (result) in
-                
-                switch result {
-                
-                case .success(let items):
-                    user.items = items
-                case .failure(let error):
-                    if error as! FirestoreError != FirestoreError.emptySnapshot {
-                        print(error.localizedDescription)
-                    }
-                    user.items = [Item?]()
                 }
             }
+            
+            Divider()
         }
+     
         
       
     }

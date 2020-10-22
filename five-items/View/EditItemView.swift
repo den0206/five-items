@@ -179,6 +179,7 @@ struct EditItemView: View {
         }.onAppear {
             vm.editItem = item
         }
+        .loading(isShowing: $vm.showLoading)
     }
 }
 
@@ -197,6 +198,7 @@ extension EditItemView {
             }
         }
         
+        vm.showLoading = true
         
         FBItem.editItem(vm: vm, user: userInfo.user) { (result) in
             
@@ -204,9 +206,12 @@ extension EditItemView {
             
             case .success(let item):
                 userInfo.user.items[item.index] = item
+                vm.showLoading = false
                 self.presentationMode.wrappedValue.dismiss()
 
             case .failure(let error):
+                vm.showLoading = false
+
                 errorMessage = error.localizedDescription
                 showAlert = true
             }
@@ -216,15 +221,23 @@ extension EditItemView {
     
     func deleteItem() {
         
+        vm.showLoading = true
+        
         FBItem.deleteItem(item: item, userId: userInfo.user.uid) { (result) in
             
             switch result {
             
             case .success(let index):
+                
+                vm.showLoading = false
+
                 userInfo.user.items[index] = nil
                 self.presentationMode.wrappedValue.dismiss()
                 
             case .failure(let error):
+                
+                vm.showLoading = false
+
                 self.alertType = .errorMessage
                 self.errorMessage = error.localizedDescription
                 self.showAlert = true

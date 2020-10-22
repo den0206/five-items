@@ -14,6 +14,7 @@ class UsersViewModel : ObservableObject{
     
     @Published var isSearchng = false
     @Published var searchText = ""
+    @Published var showLoading = false
     
     func fetchUsers(currentUser : FBUser) {
         FBUserSearvice.fetchUsers(currentUser: currentUser) { (result) in
@@ -22,6 +23,7 @@ class UsersViewModel : ObservableObject{
             
             case .success(let users):
                 self.users = users
+                self.showLoading = false
             case .failure(let error):
                 print(error.localizedDescription)
             }

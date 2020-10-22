@@ -154,7 +154,9 @@ struct FBItem  {
     
     static func deleteItem(item : Item ,userId : String, completion :  @escaping(Result<Int , Error>) -> Void) {
         
-        guard item.userId == userId else {return}
+        guard item.userId == userId else {
+            completion(.failure(FirestoreError.noUser))
+            return}
         let strogeRef = Storage.storage().reference()
 
         print("Call")

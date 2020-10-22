@@ -19,6 +19,7 @@ class AddItemViewModel : ObservableObject {
     
     @Published var showPL = true
     @Published var showPicker = false
+    @Published var showLoading = false
     
     var isComplete : Bool {
         

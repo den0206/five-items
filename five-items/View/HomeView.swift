@@ -14,6 +14,7 @@ import SDWebImageSwiftUI
 struct HomeView: View {
     
     @EnvironmentObject var userInfo : UserInfo
+
     
     var body: some View {
         
@@ -52,6 +53,7 @@ struct HomeView: View {
                 )
 
         }
+        
     }
     
 }

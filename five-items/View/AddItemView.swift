@@ -129,6 +129,7 @@ struct AddItemView: View {
                     .foregroundColor(.black)
             }))
         }
+        .loading(isShowing: $itemModel.showLoading)
         
         
     }
@@ -156,16 +157,23 @@ extension AddItemView {
             description = itemModel.description
         }
         
+        itemModel.showLoading = true
+
         FBItem.registrationItem(index : index,name: itemModel.name, urlString: relationUrl, imageData: itemModel.imageData, description: description, userId: userInfo.user.uid) { (result) in
+            
             
             switch result {
             
             case .success(let item):
                 print("success")
+                itemModel.showLoading = false
+
                 self.userInfo.user.items[index] = item
                 self.presentationMode.wrappedValue.dismiss()
 
             case .failure(let error):
+                itemModel.showLoading = false
+
                 errorMessage = error.localizedDescription
                 showAlert = true
             }

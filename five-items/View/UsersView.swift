@@ -48,10 +48,12 @@ struct UsersView: View {
         }
         .onAppear {
             if firstLoad {
+                vm.showLoading = true
                 vm.fetchUsers(currentUser: userInfo.user)
                 firstLoad = false
             }
         }
+        .loading(isShowing: $vm.showLoading)
  
     }
 }

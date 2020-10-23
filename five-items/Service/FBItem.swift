@@ -223,11 +223,30 @@ struct FBItem  {
 
 extension FBItem {
     
-    static func fetchAllitems(userId : String, completion :  @escaping(Result<[Item], Error>) -> Void) {
+    static func fetchAllitems(userId : String, lastDoc : DocumentSnapshot? = nil, completion :  @escaping(Result<([Item], DocumentSnapshot?), Error>) -> Void) {
         
         var items = [Item]()
+        var ref : Query!
         
-        Firestore.firestore().collectionGroup(kITEMS).order(by: kDATE, descending: true).getDocuments { (snapshot, error) in
+        var myCount = 0
+        var docCount = 0
+        var existCount : Int {
+            docCount - myCount
+        }
+       
+        
+        if lastDoc == nil {
+            ref = Firestore.firestore().collectionGroup(kITEMS).order(by: kDATE, descending: true).limit(to: 12)
+            
+        } else {
+            print("call")
+            ref = Firestore.firestore().collectionGroup(kITEMS).order(by: kDATE, descending: true).start(afterDocument: lastDoc!).limit(to: 12)
+            
+        }
+        
+      
+        
+        ref.getDocuments { (snapshot, error) in
             
             if let error = error {
                 completion(.failure(error))
@@ -244,18 +263,48 @@ extension FBItem {
             
             snapshot.documents.forEach { (doc) in
                 
+                
                 let data = doc.data()
                 guard let item = Item(dic: data) else {
                     completion(.failure(FirestoreError.noUser))
+                    print("BUG")
                     return
                 }
                 
                 if item.userId != userId {
                     items.append(item)
+                    docCount += 1
+                } else {
+                    myCount += 1
                 }
             }
             
-            completion(.success(items))
+            let lastDoc = snapshot.documents.last
+            
+            completion(.success((items, lastDoc)))
+        }
+        
+        
+    }
+    
+   static func getLastItem(completion :  @escaping(Result<DocumentSnapshot?, Error>) -> Void) {
+    
+        Firestore.firestore().collectionGroup(kITEMS).order(by: kDATE, descending: true).limit(toLast: 1).getDocuments { (snapshot, error) in
+            
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            guard let snapshot = snapshot else {
+                completion(.failure(FirestoreError.noDocumentSNapshot))
+                return
+                
+            }
+            guard !snapshot.isEmpty else {
+                completion(.failure(FirestoreError.emptySnapshot))
+                return}
+            
+            completion(.success(snapshot.documents.last))
         }
     }
 }

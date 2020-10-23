@@ -48,6 +48,7 @@ struct UsersView: View {
         }
         .onAppear {
             if firstLoad {
+                print("Call")
                 vm.showLoading = true
                 vm.fetchUsers(currentUser: userInfo.user)
                 firstLoad = false

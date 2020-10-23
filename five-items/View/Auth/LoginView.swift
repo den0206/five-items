@@ -23,7 +23,9 @@ struct LoginView: View {
     @State private var authError : EmailAuthError?
     @State private var showAlert = false
     
+    
     var body: some View {
+        
         
         VStack {
             
@@ -52,12 +54,16 @@ struct LoginView: View {
             VStack(spacing : 10) {
                 
                 Button(action: {
+                    
+                    
                     FBAuth.loginUser(email: user.email, password: user.password) { (result) in
                         
                         switch result {
                         case .success(_):
                             print("Success")
+                            
                         case .failure(let authError):
+
                             self.authError = authError
                             self.showAlert = true
                         }
@@ -98,7 +104,9 @@ struct LoginView: View {
                 })
                 
             }
-        }.sheet(item: $sheetType) { (item) in
+            
+        }
+        .sheet(item: $sheetType) { (item) in
             switch item {
             case .signUp :
                 SignUpView()

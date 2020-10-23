@@ -18,6 +18,8 @@ struct SignUpView: View {
     @State private var errorMessage = ""
     @State private var showAlert = false
     
+    @State private var showLoading = false
+    
     var body: some View {
         
         NavigationView {
@@ -96,14 +98,19 @@ struct SignUpView: View {
                     
                     Button(action: {
                         
+                        self.showLoading = true
+                        
                         FBAuth.createUser(email: user.email, name: user.fullname, password: user.password, imageData: user.imageData) { (result) in
                             
                             switch result {
                             
                             case .success(let user):
                                 print("Success")
+                                self.showLoading = false
                                 self.userInfo.user = user
                             case .failure(let error):
+                                self.showLoading = false
+
                                 
                                 errorMessage = error.localizedDescription
                                 showAlert = true
@@ -139,6 +146,7 @@ struct SignUpView: View {
         .alert(isPresented: $showAlert, content: {
             Alert(title: Text("Error"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
         })
+        .loading(isShowing: $showLoading)
 
     }
 }

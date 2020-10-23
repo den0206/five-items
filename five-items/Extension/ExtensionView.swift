@@ -26,7 +26,16 @@ struct LoadingView<Presenting>: View where Presenting: View {
             ZStack(alignment: .center) {
 
                 self.presenting()
-                    .blur(radius: self.isShowing ? 1 : 0)
+                 .blur(radius: self.isShowing ? 1 : 0)
+                
+                
+                /// black back
+                if self.isShowing {
+                    
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea(.all)
+                }
+                    
 
                 VStack {
                     self.text
@@ -42,6 +51,7 @@ struct LoadingView<Presenting>: View where Presenting: View {
             }
 
         }
+        
 
     }
 }

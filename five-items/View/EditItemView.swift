@@ -200,6 +200,13 @@ extension EditItemView {
         
         vm.showLoading = true
         
+        
+        if testMode {
+            guard let imageData = imageByUrl(url: getExampleImageUrl("item")) else {print("Error");return}
+            vm.imageData = imageData
+           
+        }
+        
         FBItem.editItem(vm: vm, user: userInfo.user) { (result) in
             
             switch result {

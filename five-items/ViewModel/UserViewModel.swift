@@ -16,6 +16,8 @@ struct UserViewModel {
     var confirmPassword = ""
     var imageData : Data = .init(count: 0)
     
+    
+    
     var isLoginComplete : Bool {
         
         if isEmpty(_field: email) || isEmpty(_field: password) {

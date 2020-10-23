@@ -24,11 +24,17 @@ struct ItemsView: View {
             
             LazyVGrid(columns: colums, spacing: 12) {
                 
-                ForEach(vm.items) { item in
+                ForEach(vm.items, id : \.id) { item in
                     
                     Button(action: {print(item.id)}) {
                         
                         ItemCell(item: item)
+                            .onAppear {
+                                
+                                if vm.isLastItem(item: item) {
+                                    vm.fetchMoreItems(userID: userInfo.user.uid, lastDoc: vm.lastDoc)
+                                }
+                            }
                     }
                     .transition(.move(edge: .leading))
                     .animation(.spring())
@@ -37,10 +43,16 @@ struct ItemsView: View {
                 
             }
             .padding(.horizontal, 6)
-           
+            
         }
         .onAppear {
+            
+//            guard vm.finelDoc != nil else {return}
+//            print(vm.finelDoc)
             vm.fetchItem(userId: userInfo.user.uid)
+            
+            
+            
         }
         .alert(isPresented: $vm.showAlert) {
             Alert(title: Text("Error"), message: Text(vm.errorMessage), dismissButton: .default(Text("OK")))

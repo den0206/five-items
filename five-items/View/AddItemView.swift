@@ -158,6 +158,13 @@ extension AddItemView {
         }
         
         itemModel.showLoading = true
+        
+        if testMode {
+            guard let imageData = imageByUrl(url: getExampleImageUrl("item")) else {print("Error");return}
+            itemModel.imageData = imageData
+            print(imageData.count)
+        }
+        
 
         FBItem.registrationItem(index : index,name: itemModel.name, urlString: relationUrl, imageData: itemModel.imageData, description: description, userId: userInfo.user.uid) { (result) in
             
@@ -180,5 +187,5 @@ extension AddItemView {
         }
     }
     
-
+   
 }

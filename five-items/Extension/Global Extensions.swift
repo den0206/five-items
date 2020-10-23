@@ -53,10 +53,33 @@ struct TextArea: View {
             }
             
         }
-        
-
-            
+      
     }
    
 }
+
+//MARK: - Dummy image
+
+func getExampleImageUrl(_ word : String = "people") -> URL {
+    let iValue = Int.random(in: 1 ... 99)
+    let urlString : String = "https://source.unsplash.com/random/450×450/?\(word)\(iValue)"
+    
+    let encodeUrlString: String = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+    return URL(string: encodeUrlString)!
+}
+
+
+func imageByUrl(url: URL) -> Data? {
+    do {
+        let data = try Data(contentsOf: url)
+        
+        return UIImage(data: data)?.jpegData(compressionQuality: 0.3)
+    } catch let error{
+        print(error.localizedDescription)
+    }
+    
+    return nil
+}
+
+
 

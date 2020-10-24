@@ -21,7 +21,6 @@ struct EditView: View {
     
     @EnvironmentObject var userInfo : UserInfo
 
-    @State private var showSheet = false
     @State private var selectedIndex = 0
     @State private var sheetType : EditViewSheet?
     
@@ -34,17 +33,17 @@ struct EditView: View {
                 VStack(spacing : 40) {
                     
                     HStack {
-                        AddRecButton(showSheet: $showSheet, selectedIndex: $selectedIndex, sheetType: $sheetType, index: 0)
+                        AddRecButton(selectedIndex: $selectedIndex, sheetType: $sheetType, index: 0)
                     }
                     
                     HStack(spacing : 40) {
-                        AddRecButton(showSheet: $showSheet, selectedIndex: $selectedIndex, sheetType: $sheetType, index: 1)
-                        AddRecButton(showSheet: $showSheet, selectedIndex: $selectedIndex,sheetType: $sheetType, index: 2)
+                        AddRecButton(selectedIndex: $selectedIndex, sheetType: $sheetType, index: 1)
+                        AddRecButton( selectedIndex: $selectedIndex,sheetType: $sheetType, index: 2)
                     }
                     
                     HStack(spacing : 40) {
-                        AddRecButton(showSheet: $showSheet, selectedIndex: $selectedIndex,sheetType: $sheetType, index: 3)
-                        AddRecButton(showSheet: $showSheet, selectedIndex: $selectedIndex,sheetType: $sheetType, index: 4)
+                        AddRecButton(selectedIndex: $selectedIndex,sheetType: $sheetType, index: 3)
+                        AddRecButton(selectedIndex: $selectedIndex,sheetType: $sheetType, index: 4)
                     }
                     
                 }
@@ -53,6 +52,7 @@ struct EditView: View {
                
                 
             }
+//            .background(Image("wood").resizable().scaledToFill())
             .navigationBarTitle("アイテム", displayMode: .inline)
             .sheet(item: $sheetType) { (item) in
                 
@@ -80,7 +80,6 @@ struct AddRecButton : View {
     
     @EnvironmentObject var userInfo : UserInfo
     
-    @Binding var showSheet : Bool
     @Binding var selectedIndex : Int
     @Binding var sheetType : EditViewSheet?
     
@@ -97,9 +96,9 @@ struct AddRecButton : View {
             
             Button(action: {
                 self.sheetType = .edit
-                selectedIndex = index
 
-                self.showSheet = true
+                selectedIndex = index
+                print(selectedIndex)
             }) {
                 
                 WebImage(url: item!.imageUrl)
@@ -123,7 +122,6 @@ struct AddRecButton : View {
             Button(action: {
                 self.sheetType = .new
                 
-                showSheet = true
                 selectedIndex = index
             }) {
                 Rectangle()

@@ -13,7 +13,6 @@ struct ItemDetailView: View {
     var item : Item
     @Environment(\.presentationMode) var presentationMode
 
-    
     var body: some View {
         
         ZStack {
@@ -21,16 +20,16 @@ struct ItemDetailView: View {
             /// backgorund(Z1)
             WebImage(url: item.imageUrl)
                 .resizable()
+                .renderingMode(.original)
                 .ignoresSafeArea(.all, edges: .top)
-                .aspectRatio(contentMode: .fill)
             
             
             /// Z2
             LinearGradient(gradient: .init(colors: [Color.black.opacity(0),Color.black.opacity(0.8)]), startPoint: .center, endPoint: .bottom)
             
             /// Z3
+            
             VStack {
-
                 HStack {
 
                     Spacer()
@@ -41,30 +40,75 @@ struct ItemDetailView: View {
                         Image(systemName: "xmark.circle")
                             .foregroundColor(.white)
                             .font(.system(size: 33))
+                            .background(BlurView(style: .light).clipShape(Circle()))
                             .padding(.trailing, 10)
                     }
                 }
                 
                 Spacer()
                 
-                VStack(alignment: .leading) {
+                ZStack {
+                    BlurView(style: .light)
                     
-                    
-                    Text(item.name).font(.title)
-                        .foregroundColor(.white)
-                    
-                    if item.description != nil{
-                        Text(item.description!)
-                            .foregroundColor(.white)
+                    VStack {
+                        VStack(alignment: .leading) {
+                            
+                            HStack {
+                                Text(item.name).font(.title)
+                                    .foregroundColor(.black)
+                                
+                                Spacer()
+                            }
+                            .padding()
+                            
+                            
+                            if item.description != nil{
+                                Text(item.description!)
+                                    .foregroundColor(.black)
+                                    .padding()
+                            }
+                            
+                        }
+                        
                     }
-                    
                 }
-                
+                .cornerRadius(8)
+                .frame(width: UIScreen.main.bounds.width - 50, height: 200)
             }
-            
+            .padding(.bottom,35)
         }
-       
+        .navigationBarHidden(true)
+        
     }
+    
+ 
+
 }
+
+struct BlurView: UIViewRepresentable {
+
+    let style: UIBlurEffect.Style
+
+    func makeUIView(context: UIViewRepresentableContext<BlurView>) -> UIView {
+        let view = UIView(frame: .zero)
+        view.backgroundColor = .clear
+        let blurEffect = UIBlurEffect(style: style)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        view.insertSubview(blurView, at: 0)
+        NSLayoutConstraint.activate([
+            blurView.heightAnchor.constraint(equalTo: view.heightAnchor),
+            blurView.widthAnchor.constraint(equalTo: view.widthAnchor),
+        ])
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView,
+                      context: UIViewRepresentableContext<BlurView>) {
+
+    }
+
+}
+
 
 

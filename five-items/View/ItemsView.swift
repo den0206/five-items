@@ -21,7 +21,7 @@ struct ItemsView: View {
         
         ScrollView {
             
-            Spacer().frame(width: UIScreen.main.bounds.width, height: 20)
+            Spacer().frame(width: UIScreen.main.bounds.width, height: 30)
             
             LazyVGrid(columns: colums, spacing: 12) {
                 
@@ -50,6 +50,7 @@ struct ItemsView: View {
             .padding(.horizontal, 6)
             
         }
+//        .background(Image("wood").resizable().scaledToFill())
         .onAppear {
             
             vm.fetchItem(userId: userInfo.user.uid)

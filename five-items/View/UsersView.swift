@@ -29,7 +29,7 @@ struct UsersView: View {
                 
                 ForEach(vm.users.indices, id : \.self) { i in
                     
-                    NavigationLink(destination: Text(vm.users[i].name)) {
+                    NavigationLink(destination: UserProfileView(user: vm.users[i])) {
                         UserCell(user: $vm.users[i])
                             .padding(4)
                     }
@@ -116,11 +116,12 @@ struct UserCell : View {
                                 .fill(Color.gray)
                                 .overlay(ProgressView()
                                             .foregroundColor(.white))
+                            
                         }
                         .frame(width: 55, height: 55)
                         .clipShape(Circle())
-                        .animation(.easeInOut(duration: 0.5))
-                        .transition(.fade)
+//                        .animation(.easeInOut(duration: 0.5))
+//                        .transition(.fade)
                     
                     
                     Text(user.name).font(.caption2)

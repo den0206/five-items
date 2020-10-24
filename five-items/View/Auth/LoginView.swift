@@ -22,99 +22,118 @@ struct LoginView: View {
     @State private var sheetType : loginViewSheet?
     @State private var authError : EmailAuthError?
     @State private var showAlert = false
-    
+    @State private var loading = false
     
     var body: some View {
         
-        
-        VStack {
-            
-            Group {
-                TextField("Email Address", text: $user.email)
-                    .autocapitalization(.none)
-                    .keyboardType(.emailAddress)
+        ZStack {
+ 
+            VStack {
                 
-                SecureField("Password", text: $user.password)
-            }
-            .frame(width : 300)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            
-            HStack {
-                Spacer()
-                
-                Button(action: {
-                    sheetType = .resetPassword
-                }, label: {
-                    Text("Reset Password")
-                        .foregroundColor(.black)
-                })
-            }.padding(.bottom)
-            .padding(.trailing, 10)
-            
-            VStack(spacing : 10) {
-                
-                Button(action: {
+                Group {
+                    TextField("Email Address", text: $user.email)
+                        .autocapitalization(.none)
+                        .keyboardType(.emailAddress)
                     
+                    SecureField("Password", text: $user.password)
+                }
+                .frame(width : 300)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                
+                HStack {
+                    Spacer()
                     
-                    FBAuth.loginUser(email: user.email, password: user.password) { (result) in
+                    Button(action: {
+                        sheetType = .resetPassword
+                    }, label: {
+                        Text("Reset Password")
+                            .foregroundColor(.black)
+                    })
+                }.padding(.bottom)
+                .padding(.trailing, 10)
+                
+                VStack(spacing : 10) {
+                    
+                    Button(action: {
                         
-                        switch result {
-                        case .success(_):
-                            print("Success")
+                        self.loading = true
+                        
+                        FBAuth.loginUser(email: user.email, password: user.password) { (result) in
                             
-                        case .failure(let authError):
+                            switch result {
+                            case .success(_):
+                                print("Success")
+                                self.loading = false
+                                
+                            case .failure(let authError):
+                                
+                                self.loading = false
 
-                            self.authError = authError
-                            self.showAlert = true
+                                self.authError = authError
+                                self.showAlert = true
+                            }
                         }
+                        
+                    }, label: {
+                        Text("Login")
+                            .foregroundColor(.white)
+                            .padding(.vertical, 15)
+                            .frame(width : 200)
+                            .background(Color.green)
+                            .cornerRadius(8)
+                            .opacity(user.isLoginComplete ? 1 : 0.7)
+                    })
+                    .disabled(!user.isLoginComplete)
+                    .alert(isPresented: $showAlert) {
+                        Alert(title: Text("Error"), message: Text(authError?.localizedDescription ?? "UnknownError"), dismissButton: .default(Text("OK")) {
+                            /// reset
+                            if authError == .incorrectPassword {
+                                user.password = ""
+                            } else {
+                                user.email = ""
+                                user.password = ""
+                            }
+                        })
                     }
                     
-                }, label: {
-                    Text("Login")
-                        .foregroundColor(.white)
-                        .padding(.vertical, 15)
-                        .frame(width : 200)
-                        .background(Color.green)
-                        .cornerRadius(8)
-                        .opacity(user.isLoginComplete ? 1 : 0.7)
-                })
-                .disabled(!user.isLoginComplete)
-                .alert(isPresented: $showAlert) {
-                    Alert(title: Text("Error"), message: Text(authError?.localizedDescription ?? "UnknownError"), dismissButton: .default(Text("OK")) {
-                        /// reset
-                        if authError == .incorrectPassword {
-                            user.password = ""
-                        } else {
-                            user.email = ""
-                            user.password = ""
-                        }
+                    Button(action: {
+                        sheetType = .signUp
+                        
+                    }, label: {
+                        Text("SignUp")
+                            .foregroundColor(.white)
+                            .padding(.vertical, 15)
+                            .frame(width : 200)
+                            .background(Color.blue)
+                            .cornerRadius(8)
                     })
+                    
                 }
                 
-                Button(action: {
-                    sheetType = .signUp
+            }
+            .sheet(item: $sheetType) { (item) in
+                switch item {
+                case .signUp :
+                    SignUpView()
+                case .resetPassword :
+                    Text("Reset")
                     
-                }, label: {
-                    Text("SignUp")
-                        .foregroundColor(.white)
-                        .padding(.vertical, 15)
-                        .frame(width : 200)
-                        .background(Color.blue)
-                        .cornerRadius(8)
-                })
+                }
+            }
+            
+            if loading {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea(.all, edges: .top)
                 
+                ProgressView("Loading...")
+                    .foregroundColor(.white)
             }
             
         }
-        .sheet(item: $sheetType) { (item) in
-            switch item {
-            case .signUp :
-                SignUpView()
-            case .resetPassword :
-                Text("Reset")
-                
-            }
-        }
+        
+     
+       
+        
         
     }
 }

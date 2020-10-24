@@ -223,29 +223,21 @@ struct FBItem  {
 
 extension FBItem {
     
-    static func fetchAllitems(userId : String, lastDoc : DocumentSnapshot? = nil, completion :  @escaping(Result<([Item], DocumentSnapshot?), Error>) -> Void) {
+    static func fetchAllitems(userId : String, lastDoc : DocumentSnapshot? = nil, completion :  @escaping(Result<([Item], DocumentSnapshot?, Int), Error>) -> Void) {
         
         var items = [Item]()
         var ref : Query!
         
-        var myCount = 0
-        var docCount = 0
-        var existCount : Int {
-            docCount - myCount
-        }
-       
         
+     
         if lastDoc == nil {
             ref = Firestore.firestore().collectionGroup(kITEMS).order(by: kDATE, descending: true).limit(to: 12)
             
         } else {
-            print("call")
             ref = Firestore.firestore().collectionGroup(kITEMS).order(by: kDATE, descending: true).start(afterDocument: lastDoc!).limit(to: 12)
             
         }
-        
-      
-        
+    
         ref.getDocuments { (snapshot, error) in
             
             if let error = error {
@@ -273,15 +265,12 @@ extension FBItem {
                 
                 if item.userId != userId {
                     items.append(item)
-                    docCount += 1
-                } else {
-                    myCount += 1
-                }
+                } 
             }
             
             let lastDoc = snapshot.documents.last
-            
-            completion(.success((items, lastDoc)))
+            let docCount = snapshot.documents.count
+            completion(.success((items, lastDoc, docCount)))
         }
         
         

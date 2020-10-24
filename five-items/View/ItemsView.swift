@@ -13,6 +13,7 @@ struct ItemsView: View {
     @EnvironmentObject var userInfo : UserInfo
     
     @StateObject var vm = ItemsViewModel()
+    @State private var exampleArray : [Item] = randomItemArray(count: 30)
     
     private var colums = Array(repeating: GridItem(spacing : 12), count: 3)
     
@@ -24,21 +25,25 @@ struct ItemsView: View {
             
             LazyVGrid(columns: colums, spacing: 12) {
                 
-                ForEach(vm.items, id : \.id) { item in
+                ForEach(vm.items) { item in
                     
-                    Button(action: {print(item.id)}) {
+                    Button(action: {
+                        vm.selectedItem = item
+                        vm.showDetail = true
+                    }) {
                         
                         ItemCell(item: item)
                             .onAppear {
-                                
-                                if vm.isLastItem(item: item) {
-                                    vm.fetchMoreItems(userID: userInfo.user.uid, lastDoc: vm.lastDoc)
+                                if vm.items.last!.id == item.id {
+                                    if !vm.reachLast{
+                                        vm.fetchMoreItems(userID: userInfo.user.uid, lastDoc: vm.lastDoc)
+                                    }
                                 }
                             }
                     }
                     .transition(.move(edge: .leading))
                     .animation(.spring())
-                   
+                    
                 }
                 
             }
@@ -47,16 +52,19 @@ struct ItemsView: View {
         }
         .onAppear {
             
-//            guard vm.finelDoc != nil else {return}
-//            print(vm.finelDoc)
             vm.fetchItem(userId: userInfo.user.uid)
-            
-            
+
             
         }
         .alert(isPresented: $vm.showAlert) {
             Alert(title: Text("Error"), message: Text(vm.errorMessage), dismissButton: .default(Text("OK")))
         }
+        .fullScreenCover(isPresented: $vm.showDetail, content: {
+            
+            if let selectedItem = vm.selectedItem  {
+                ItemDetailView(item: selectedItem)
+            }
+        })
     }
 }
 

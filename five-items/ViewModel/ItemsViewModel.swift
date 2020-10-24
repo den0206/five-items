@@ -15,25 +15,31 @@ final class ItemsViewModel : ObservableObject {
     @Published var errorMessage = ""
     @Published var showAlert = false
     @Published var lastDoc : DocumentSnapshot?
-    var finelDoc : DocumentSnapshot?
     
+    @Published var selectedItem : Item?
+    @Published var showDetail = false
+
     @Published var reachLast = false
+    @Published var loading = false
     
     func fetchItem(userId : String) {
         
         guard !reachLast else {return}
         
+        loading = true
+        
         FBItem.fetchAllitems(userId: userId) { (result) in
             
             switch result {
             
-            case .success((let items, let lastDoc)):
+            case .success((let items, let lastDoc, let docCount)):
                 
-                if items.count != 12 {
+                if docCount != 12 {
                     self.reachLast = true
                 }
                 self.items = items
                 self.lastDoc = lastDoc
+                self.loading = false
                 
             case .failure(let error):
                 print(error.localizedDescription)
@@ -54,18 +60,24 @@ final class ItemsViewModel : ObservableObject {
     
     func fetchMoreItems(userID : String, lastDoc : DocumentSnapshot?) {
         
-        guard !reachLast else {return}
+        guard !reachLast && !loading else {return}
+        
+        loading = true
+        print("More")
+        
         FBItem.fetchAllitems(userId: userID, lastDoc: lastDoc) { (result) in
             switch result {
             
-            case .success((let moreItems, let lastDoc)):
-                if moreItems.count != 12 {
-
+            case .success((let moreItems, let lastDoc, let docCount)):
+               
+               if docCount != 12 {
                     self.reachLast = true
                 }
+                
                 self.items.append(contentsOf: moreItems)
-                print(self.items.count)
                 self.lastDoc = lastDoc
+                self.loading = false
+              
                 
             case .failure(let error):
                 print(error.localizedDescription)

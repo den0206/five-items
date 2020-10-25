@@ -9,11 +9,22 @@ import Firebase
 
 struct FBUserSearvice {
     
-    static func fetchUsers(currentUser : FBUser, completion :  @escaping(Result<[FBUser], Error>) -> Void) {
+ 
+    
+    static func fetchUsers(currentUser : FBUser, lastDoc : DocumentSnapshot? = nil,  completion :  @escaping(Result<([FBUser], DocumentSnapshot?, Bool), Error>) -> Void) {
+        
+        let limit = 10
         
         var users = [FBUser]()
+        var ref : Query!
         
-        firebaseReference(.Users).getDocuments { (snapshot, error) in
+        if lastDoc == nil {
+            ref =  firebaseReference(.Users).limit(to: limit)
+        } else {
+            ref = firebaseReference(.Users).start(afterDocument: lastDoc!).limit(to: limit)
+        }
+        
+        ref.getDocuments { (snapshot, error) in
             
             if let error = error {
                 completion(.failure(error))
@@ -41,7 +52,11 @@ struct FBUserSearvice {
                 }
             }
             
-            completion(.success(users))
+            let lastDocumet = snapshot.documents.last
+            
+            let reachLast = snapshot.documents.count != limit
+            
+            completion(.success((users, lastDocumet, reachLast)))
         }
         
         

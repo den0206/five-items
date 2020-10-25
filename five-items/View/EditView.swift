@@ -22,7 +22,9 @@ struct EditView: View {
     @EnvironmentObject var userInfo : UserInfo
 
     @State private var selectedIndex = 0
+    @State private var selectedItem : Item = Item(id: "", name: "", imageUrl: getExampleImageUrl(), userId: "", index: 0)
     @State private var sheetType : EditViewSheet?
+    
     
     
     var body: some View {
@@ -33,17 +35,17 @@ struct EditView: View {
                 VStack(spacing : 40) {
                     
                     HStack {
-                        AddRecButton(selectedIndex: $selectedIndex, sheetType: $sheetType, index: 0)
+                        AddRecButton(selectedIndex: $selectedIndex,selectedItem : $selectedItem, sheetType: $sheetType, index: 0)
                     }
                     
                     HStack(spacing : 40) {
-                        AddRecButton(selectedIndex: $selectedIndex, sheetType: $sheetType, index: 1)
-                        AddRecButton( selectedIndex: $selectedIndex,sheetType: $sheetType, index: 2)
+                        AddRecButton(selectedIndex: $selectedIndex,selectedItem : $selectedItem, sheetType: $sheetType, index: 1)
+                        AddRecButton( selectedIndex: $selectedIndex,selectedItem : $selectedItem, sheetType: $sheetType, index: 2)
                     }
                     
                     HStack(spacing : 40) {
-                        AddRecButton(selectedIndex: $selectedIndex,sheetType: $sheetType, index: 3)
-                        AddRecButton(selectedIndex: $selectedIndex,sheetType: $sheetType, index: 4)
+                        AddRecButton(selectedIndex: $selectedIndex,selectedItem : $selectedItem,sheetType: $sheetType, index: 3)
+                        AddRecButton(selectedIndex: $selectedIndex,selectedItem : $selectedItem,sheetType: $sheetType, index: 4)
                     }
                     
                 }
@@ -52,7 +54,6 @@ struct EditView: View {
                
                 
             }
-//            .background(Image("wood").resizable().scaledToFill())
             .navigationBarTitle("アイテム", displayMode: .inline)
             .sheet(item: $sheetType) { (item) in
                 
@@ -61,17 +62,12 @@ struct EditView: View {
                     AddItemView(index: $selectedIndex)
                 case .edit :
                     
-                    if let item = userInfo.user.items[selectedIndex] {
-                        
-                        EditItemView(item: item)
-                    } else {
-                        Text("No Item \(selectedIndex)")
-                    }
+                    EditItemView(item: $selectedItem)
                     
                 }
             }
         }
-       
+        
         
     }
 }
@@ -81,6 +77,7 @@ struct AddRecButton : View {
     @EnvironmentObject var userInfo : UserInfo
     
     @Binding var selectedIndex : Int
+    @Binding var selectedItem : Item
     @Binding var sheetType : EditViewSheet?
     
     var index : Int
@@ -96,9 +93,8 @@ struct AddRecButton : View {
             
             Button(action: {
                 self.sheetType = .edit
-
+                selectedItem = item!
                 selectedIndex = index
-                print(selectedIndex)
             }) {
                 
                 WebImage(url: item!.imageUrl)

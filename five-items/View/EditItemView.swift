@@ -15,7 +15,7 @@ struct EditItemView: View {
         case delete
     }
     
-    var item : Item
+    @Binding var item : Item
     @EnvironmentObject var userInfo : UserInfo
     @StateObject var vm =  AddItemViewModel()
     
@@ -24,6 +24,7 @@ struct EditItemView: View {
     @State private var alertType : AleretType = .errorMessage
     
     @Environment(\.presentationMode) var presentationMode
+
 
     var body: some View {
         

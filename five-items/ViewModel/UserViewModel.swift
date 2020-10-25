@@ -16,7 +16,7 @@ struct UserViewModel {
     var confirmPassword = ""
     var imageData : Data = .init(count: 0)
     
-    
+    var currentUser : FBUser?
     
     var isLoginComplete : Bool {
         
@@ -42,6 +42,17 @@ struct UserViewModel {
             return true
         }
         
+    }
+    
+    var didChangeStatus : Bool {
+        
+        guard let currentUser = currentUser else {return false}
+        
+        if currentUser.name != fullname || currentUser.email != email  || !(self.imageData == .init(count :0)){
+            return true
+        }
+        
+        return false
     }
     
     

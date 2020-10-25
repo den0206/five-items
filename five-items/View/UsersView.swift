@@ -27,19 +27,23 @@ struct UsersView: View {
                 
                 Divider()
                 
-                ForEach(vm.users.indices, id : \.self) { i in
+                ScrollView {
                     
-                    NavigationLink(destination: UserProfileView(user: vm.users[i])) {
-                        UserCell(user: $vm.users[i])
-                            .padding(4)
-                            .onAppear {
-                                if vm.users.last!.uid == vm.users[i].uid {
-                                    vm.fetchMoreUsers(currentUser: userInfo.user)
+                    ForEach(vm.users.indices, id : \.self) { i in
+                        
+                        NavigationLink(destination: UserProfileView(user: vm.users[i])) {
+                            UserCell(user: $vm.users[i])
+                                .padding(4)
+                                .onAppear {
+                                    if vm.users.last!.uid == vm.users[i].uid {
+                                        vm.fetchMoreUsers(currentUser: userInfo.user)
+                                    }
                                 }
-                            }
+                        }
+                        
                     }
-                    
                 }
+                
                 
                 Spacer()
 

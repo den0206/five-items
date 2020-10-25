@@ -13,7 +13,7 @@ struct MainTabView: View {
     
     @EnvironmentObject var userInfo : UserInfo
     @State private var loading = true
-    @State private var firstLoad = true
+//    @State private var firstLoad = true
     
     
     var body: some View {
@@ -21,9 +21,10 @@ struct MainTabView: View {
         if loading {
             
             ProgressView("Loading...")
+                
                 .onAppear {
                     
-                    if firstLoad {
+                    if !userInfo.setCurrentUser {
                         guard let uid = Auth.auth().currentUser?.uid else {return}
                         
                         FBAuth.fecthFBUser(uid: uid) { (result) in
@@ -55,7 +56,7 @@ struct MainTabView: View {
                             }
                         }
                         
-                        firstLoad = false
+                        userInfo.setCurrentUser = true
                     }
                 }
                

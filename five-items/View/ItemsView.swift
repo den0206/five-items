@@ -50,7 +50,6 @@ struct ItemsView: View {
             .padding(.horizontal, 6)
             
         }
-//        .background(Image("wood").resizable().scaledToFill())
         .onAppear {
             
             vm.fetchItem(userId: userInfo.user.uid)

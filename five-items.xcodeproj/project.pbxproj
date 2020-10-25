@@ -25,6 +25,8 @@
 		3A40F579253C19AE009B5A39 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A40F578253C19AE009B5A39 /* Item.swift */; };
 		3A427FB8253C74FF00016030 /* FBItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A427FB7253C74FF00016030 /* FBItem.swift */; };
 		3A6979CA253A7E79004554A6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A6979C9253A7E79004554A6 /* GoogleService-Info.plist */; };
+		3A740CE82545BF6C00550E31 /* UserEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A740CE72545BF6C00550E31 /* UserEditView.swift */; };
+		3A740CEC2545C0E800550E31 /* UserEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A740CEB2545C0E800550E31 /* UserEditViewModel.swift */; };
 		3A770E9F254431A500287D85 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A770E9E254431A500287D85 /* Assets.xcassets */; };
 		3AAB93742541CCF500F62F3A /* ExtensionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAB93732541CCF500F62F3A /* ExtensionView.swift */; };
 		3AC023F2253ACD91000B01E7 /* FirebaseReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC023F1253ACD91000B01E7 /* FirebaseReference.swift */; };
@@ -59,6 +61,8 @@
 		3A40F578253C19AE009B5A39 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		3A427FB7253C74FF00016030 /* FBItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBItem.swift; sourceTree = "<group>"; };
 		3A6979C9253A7E79004554A6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3A740CE72545BF6C00550E31 /* UserEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEditView.swift; sourceTree = "<group>"; };
+		3A740CEB2545C0E800550E31 /* UserEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEditViewModel.swift; sourceTree = "<group>"; };
 		3A770E9E254431A500287D85 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3AAB93732541CCF500F62F3A /* ExtensionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionView.swift; sourceTree = "<group>"; };
 		3AC023F1253ACD91000B01E7 /* FirebaseReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseReference.swift; sourceTree = "<group>"; };
@@ -186,6 +190,7 @@
 				3A16003D253BE80700067CC6 /* EditView.swift */,
 				3A15E826253FE66A001F8D7A /* UsersView.swift */,
 				3A1FC31625442377009A9B1F /* UserProfileView.swift */,
+				3A740CE72545BF6C00550E31 /* UserEditView.swift */,
 				3A40F571253C05EA009B5A39 /* AddItemView.swift */,
 				3AE4B93D253F2009007BB4FE /* EditItemView.swift */,
 			);
@@ -199,6 +204,7 @@
 				3AC1FFC4253A9C8F0059E3E9 /* UserViewModel.swift */,
 				3A40F56E253C053F009B5A39 /* AddItemViewModel.swift */,
 				3A15E82A253FE855001F8D7A /* UsersViewModel.swift */,
+				3A740CEB2545C0E800550E31 /* UserEditViewModel.swift */,
 				3A3BE8CA254071AF0054C985 /* ItemsViewModel.swift */,
 			);
 			path = ViewModel;
@@ -341,6 +347,7 @@
 				3A40F56F253C053F009B5A39 /* AddItemViewModel.swift in Sources */,
 				3AC8FBAC253A93FF0043543D /* UserInfo.swift in Sources */,
 				3A393921253ABC0600DE670B /* FBAuth.swift in Sources */,
+				3A740CE82545BF6C00550E31 /* UserEditView.swift in Sources */,
 				3AC1FFC5253A9C8F0059E3E9 /* UserViewModel.swift in Sources */,
 				3AC8FBB1253A94960043543D /* FBUser.swift in Sources */,
 				3A1FC31725442377009A9B1F /* UserProfileView.swift in Sources */,
@@ -348,6 +355,7 @@
 				3A3BE8C7254070A60054C985 /* ItemsView.swift in Sources */,
 				3AC1FFC8253AA3320059E3E9 /* SignUpView.swift in Sources */,
 				3AC023F2253ACD91000B01E7 /* FirebaseReference.swift in Sources */,
+				3A740CEC2545C0E800550E31 /* UserEditViewModel.swift in Sources */,
 				3A39396A253AC62B00DE670B /* Constants.swift in Sources */,
 				3ACDB1F32543D49C0046A3B1 /* ItemDetailView.swift in Sources */,
 				3A160039253BE69F00067CC6 /* MainTabView.swift in Sources */,

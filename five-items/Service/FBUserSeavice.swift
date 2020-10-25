@@ -9,7 +9,6 @@ import Firebase
 
 struct FBUserSearvice {
     
- 
     
     static func fetchUsers(currentUser : FBUser, lastDoc : DocumentSnapshot? = nil,  completion :  @escaping(Result<([FBUser], DocumentSnapshot?, Bool), Error>) -> Void) {
         
@@ -57,6 +56,21 @@ struct FBUserSearvice {
             let reachLast = snapshot.documents.count != limit
             
             completion(.success((users, lastDocumet, reachLast)))
+        }
+        
+        
+    }
+    
+    //MARK: - Edit User
+    
+    static func editUser(currentUID : String, vm : UserEditViewModel, completion :  @escaping(Result<FBUser, Error>) -> Void) {
+        
+        guard vm.user.currentUser?.uid == currentUID else { return}
+        
+        if vm.user.imageData.count != 0 {
+            
+        } else {
+            
         }
         
         

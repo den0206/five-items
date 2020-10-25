@@ -14,7 +14,7 @@ import SDWebImageSwiftUI
 struct HomeView: View {
     
     @EnvironmentObject var userInfo : UserInfo
-
+    @State private var showSheet = false
     
     var body: some View {
         
@@ -23,24 +23,33 @@ struct HomeView: View {
             ItemsView()
                 .navigationBarTitle("アイテム", displayMode: .inline)
                 .navigationBarItems(
-                    leading :  WebImage(url: userInfo.user.avaterUrl)
-                        .resizable()
-                        .placeholder{
-                            Circle()
-                                .fill(Color.gray)
-                                .overlay(ProgressView()
-                                            .foregroundColor(.white))
-                        }
-                        .frame(width: 30, height: 30)
-                        .clipShape(Circle())
-                        .animation(.easeInOut(duration: 0.5))
-                        .transition(.fade),
+                    leading :
+                        
+                        Button(action: {self.showSheet = true}, label: {
+                            WebImage(url: userInfo.user.avaterUrl)
+                            .resizable()
+                            .placeholder{
+                                Circle()
+                                    .fill(Color.gray)
+                                    .overlay(ProgressView()
+                                                .foregroundColor(.white))
+                            }
+                            .frame(width: 30, height: 30)
+                            .clipShape(Circle())
+                            .animation(.easeInOut(duration: 0.5))
+                            .transition(.fade)
+                        })
+                        .sheet(isPresented: $showSheet, content: {
+                            UserEditView()
+                        })
+                       ,
                     trailing:
                         Button(action: {FBAuth.logOut { (result) in
                             switch result {
                             
                             case .success(_):
                                 self.userInfo.user = FBUser(uid: "", name: "", email: "")
+                                self.userInfo.setCurrentUser = false
                                 self.userInfo.isUserAuthenticated = .signedOut
                             case .failure(let error):
                                 print(error.localizedDescription)

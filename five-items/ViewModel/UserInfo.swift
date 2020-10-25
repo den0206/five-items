@@ -17,6 +17,8 @@ final class UserInfo : ObservableObject {
     @Published var isUserAuthenticated : AuthState = .undefined
     @Published var user : FBUser = .init(uid : "", name : "", email : "")
     
+    @Published var setCurrentUser = false
+    
     var listnerHandle : AuthStateDidChangeListenerHandle?
     
     func configureStateDidchange() {

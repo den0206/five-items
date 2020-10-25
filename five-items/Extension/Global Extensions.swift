@@ -47,9 +47,13 @@ struct TextArea: View {
                 )
             
             if showPlacehoder{
-                Text(placeholder)
-                    .padding(EdgeInsets(top: 4, leading: 7, bottom: 7, trailing: 0))
-                    .foregroundColor(.gray)
+                
+                if text == "" {
+                    Text(placeholder)
+                        .padding(EdgeInsets(top: 4, leading: 7, bottom: 7, trailing: 0))
+                        .foregroundColor(.gray)
+                }
+                
             }
             
         }

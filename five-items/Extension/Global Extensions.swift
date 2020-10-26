@@ -72,6 +72,11 @@ func getExampleImageUrl(_ word : String = "people") -> URL {
     return URL(string: encodeUrlString)!
 }
 
+func getRandomPhoto() -> URL {
+    let urlString = "https://picsum.photos/seed/picsum/200/300"
+    return URL(string: urlString)!
+}
+
 
 func imageByUrl(url: URL) -> Data? {
     do {

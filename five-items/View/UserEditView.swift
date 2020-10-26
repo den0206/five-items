@@ -97,13 +97,22 @@ struct UserEditView: View {
             .padding()
             
             Button(action: {
-                FBUserSearvice.editUser(currentUID: userInfo.user.uid, vm: vm) { (result) in
+                
+                vm.loading = true
+    
+                FBUserSearvice.editUser(currentUser: userInfo.user, vm: vm) { (result) in
                     
                     switch result {
                     
                     case .success(let user):
-                        print("Success")
+                        userInfo.user = user
+                        
+                        vm.loading = false
+                        self.presentationMode.wrappedValue.dismiss()
+                        
                     case .failure(let error):
+                        
+                        vm.loading = false
                         
                         vm.errorMessage = error.localizedDescription
                         vm.showAlert = true

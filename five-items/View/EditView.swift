@@ -22,7 +22,7 @@ struct EditView: View {
     @EnvironmentObject var userInfo : UserInfo
 
     @State private var selectedIndex = 0
-    @State private var selectedItem : Item = Item(id: "", name: "", imageUrl: getExampleImageUrl(), userId: "", index: 0)
+    @State private var selectedItem : Item = Item(id: "", name: "", imageLinks: [], userId: "", index: 0)
     @State private var sheetType : EditViewSheet?
     
     
@@ -97,7 +97,7 @@ struct AddRecButton : View {
                 selectedIndex = index
             }) {
                 
-                WebImage(url: item!.imageUrl)
+                WebImage(url: item!.imageLinks[0])
                     .resizable()
                     .placeholder {
                         Rectangle()

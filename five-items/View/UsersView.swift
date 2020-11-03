@@ -95,7 +95,7 @@ struct UserCell : View {
                 } else {
                     ForEach(user.items.compactMap({$0})) { item in
                         
-                        WebImage(url: item.imageUrl)
+                        WebImage(url: item.imageLinks[0])
                             .resizable()
                             .placeholder {
                                 Rectangle()

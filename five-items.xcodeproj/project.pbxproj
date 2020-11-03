@@ -40,6 +40,7 @@
 		3AC8FBAC253A93FF0043543D /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC8FBAB253A93FF0043543D /* UserInfo.swift */; };
 		3AC8FBB1253A94960043543D /* FBUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC8FBB0253A94960043543D /* FBUser.swift */; };
 		3ACDB1F32543D49C0046A3B1 /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACDB1F22543D49C0046A3B1 /* ItemDetailView.swift */; };
+		3AE361A92550F5DB00DBD740 /* Reachbility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE361A82550F5DB00DBD740 /* Reachbility.swift */; };
 		3AE4B93E253F2009007BB4FE /* EditItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE4B93D253F2009007BB4FE /* EditItemView.swift */; };
 /* End PBXBuildFile section */
 
@@ -78,6 +79,7 @@
 		3AC8FBAB253A93FF0043543D /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		3AC8FBB0253A94960043543D /* FBUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBUser.swift; sourceTree = "<group>"; };
 		3ACDB1F22543D49C0046A3B1 /* ItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
+		3AE361A82550F5DB00DBD740 /* Reachbility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachbility.swift; sourceTree = "<group>"; };
 		3AE4B93D253F2009007BB4FE /* EditItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemView.swift; sourceTree = "<group>"; };
 		92939F15AD5E9A9D84DB96B5 /* Pods-five-items.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-five-items.debug.xcconfig"; path = "Target Support Files/Pods-five-items/Pods-five-items.debug.xcconfig"; sourceTree = "<group>"; };
 		CC9F4340C011D532DF062D6A /* Pods-five-items.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-five-items.release.xcconfig"; path = "Target Support Files/Pods-five-items/Pods-five-items.release.xcconfig"; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				3AC023F1253ACD91000B01E7 /* FirebaseReference.swift */,
 				3A40F575253C0BD4009B5A39 /* Global Extensions.swift */,
 				3AAB93732541CCF500F62F3A /* ExtensionView.swift */,
+				3AE361A82550F5DB00DBD740 /* Reachbility.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -353,6 +356,7 @@
 				3A1FC31725442377009A9B1F /* UserProfileView.swift in Sources */,
 				3A15E827253FE66A001F8D7A /* UsersView.swift in Sources */,
 				3A3BE8C7254070A60054C985 /* ItemsView.swift in Sources */,
+				3AE361A92550F5DB00DBD740 /* Reachbility.swift in Sources */,
 				3AC1FFC8253AA3320059E3E9 /* SignUpView.swift in Sources */,
 				3AC023F2253ACD91000B01E7 /* FirebaseReference.swift in Sources */,
 				3A740CEC2545C0E800550E31 /* UserEditViewModel.swift in Sources */,

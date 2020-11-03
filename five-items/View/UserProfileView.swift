@@ -49,7 +49,7 @@ struct UserProfileView: View {
                     ForEach(user.items.compactMap({$0})) { item in
                         
                         NavigationLink(destination: ItemDetailView(item: item)) {
-                            WebImage(url: item.imageUrl)
+                            WebImage(url: item.imageLinks[0])
                                 .resizable()
                                 .placeholder {
                                     Rectangle()

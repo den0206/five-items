@@ -34,37 +34,21 @@ struct AddItemView: View {
                     }
                     
                     HStack {
-                        Button(action: {itemModel.showPicker = true}) {
-                            
-                            if itemModel.imageData.count == 0 {
-                                Rectangle()
-                                    .fill(Color(white: 0.95))
-                                    .frame(width: 120, height: 120)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 5)
-                                    .overlay(
-                                        Image(systemName: "plus")
-                                            .foregroundColor(.gray)
-                                            .frame(width: 30, height: 30)
-                                    )
-                            } else {
-                                Image(uiImage: UIImage(data: itemModel.imageData)!)
-                                    .resizable()
-                                    .frame(width: 120, height: 120)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 5)
-                            }
-                        
-                        }
                        
+                        ImageButton(itemModel: itemModel, index: 0)
+                        
+                        VStack(spacing : 5) {
+                            ImageButton(itemModel: itemModel, index: 1)
+                            
+                            ImageButton(itemModel: itemModel, index: 2)
+                        }
+                        
                     }
-                    .padding(.bottom, 30)
-                    .sheet(isPresented: $itemModel.showPicker) {
-                        ImagePicker(image: $itemModel.imageData, errorMessage: $errorMessage, showAlert: $showAlert)
-                            .alert(isPresented: $showAlert) {
-                                Alert(title: Text("Error"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
-                            }
-                    }
+                    .frame(width: UIScreen.main.bounds.width - 10, height: 300)
+                    .sheet(isPresented: $itemModel.showPicker, content: {
+                        ItemImagePicker(images: $itemModel.images, errorMessage: $errorMessage, showAlert: $showAlert, index: $itemModel.imageIndex)
+                    })
+
                     
                     Group {
                         
@@ -158,34 +142,136 @@ extension AddItemView {
         }
         
         itemModel.showLoading = true
+//
+//        if testMode {
+//            guard let imageData = imageByUrl(url: getExampleImageUrl("item")) else {print("Error");return}
+//            itemModel.imageData = imageData
+//            print(imageData.count)
+//        }
         
-        if testMode {
-            guard let imageData = imageByUrl(url: getExampleImageUrl("item")) else {print("Error");return}
-            itemModel.imageData = imageData
-            print(imageData.count)
-        }
-        
-
-        FBItem.registrationItem(index : index,name: itemModel.name, urlString: relationUrl, imageData: itemModel.imageData, description: description, userId: userInfo.user.uid) { (result) in
-            
+        FBItem.registationItemMultipleImage(index: index, name: itemModel.name, urlString: relationUrl, images: itemModel.images, description: description, userId: userInfo.user.uid) { (result) in
             
             switch result {
-            
-            case .success(let item):
-                print("success")
+            case .success(let item) :
+                print("Success")
                 itemModel.showLoading = false
-
                 self.userInfo.user.items[index] = item
                 self.presentationMode.wrappedValue.dismiss()
-
             case .failure(let error):
+                
                 itemModel.showLoading = false
-
                 errorMessage = error.localizedDescription
                 showAlert = true
             }
         }
+
+
     }
     
    
+}
+
+struct ImageButton : View {
+    
+    @StateObject var itemModel : AddItemViewModel
+    var index : Int
+
+    
+    var body: some View {
+        
+        
+        Button(action: {
+            itemModel.showPicker = true
+            itemModel.imageIndex = index
+        }) {
+            
+            if itemModel.images.count > index {
+                
+                Image(uiImage: UIImage(data: itemModel.images[index])!)
+                    .resizable()
+                    
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
+                    
+                
+            } else {
+                Rectangle()
+                    .fill(!itemModel.disableButton(int: index) ? Color(white: 0.95) : Color(white: 0.75))
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
+                    .overlay(
+                        
+                        Image(systemName: "plus")
+                            .foregroundColor(.gray)
+                            .frame(width: 30, height: 30)
+                    )
+            }
+           
+            
+            
+            
+        }
+        .padding(3)
+        .disabled(itemModel.disableButton(int: index))
+    }
+}
+
+
+struct ItemImagePicker: UIViewControllerRepresentable {
+    
+    @Environment(\.presentationMode) var presentationMode
+    @Binding var images: [Data]
+    @Binding var errorMessage : String
+    @Binding var showAlert : Bool
+    @Binding var index : Int
+    
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        let parent: ItemImagePicker
+        
+        init(_ parent: ItemImagePicker) {
+            self.parent = parent
+        }
+        
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+            if let uiImage = info[.originalImage] as? UIImage {
+                let data = uiImage.jpegData(compressionQuality: 0.2)
+                
+                let dataToKB = Double(data!.count) / 1000.0
+                print(dataToKB)
+                
+                if dataToKB < 1000.0 {
+                    
+                    if parent.images.indices.contains(parent.index) {
+                        parent.images.remove(at: parent.index)
+                    }
+                    
+                    parent.images.insert(data!, at: parent.index)
+
+                } else {
+                    self.parent.errorMessage = "画像の容量が大きいです。"
+                    self.parent.showAlert = true
+                    return
+
+                }
+                
+                
+            }
+            
+            parent.presentationMode.wrappedValue.dismiss()
+        }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    func makeUIViewController(context: UIViewControllerRepresentableContext<ItemImagePicker>) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.delegate = context.coordinator
+        return picker
+    }
+    
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<ItemImagePicker>) {
+
+    }
 }

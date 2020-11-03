@@ -18,7 +18,7 @@ struct ItemDetailView: View {
         ZStack {
             
             /// backgorund(Z1)
-            WebImage(url: item.imageUrl)
+            WebImage(url: item.imageLinks[0])
                 .resizable()
                 .renderingMode(.original)
                 .ignoresSafeArea(.all, edges: .top)

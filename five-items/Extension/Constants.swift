@@ -25,5 +25,6 @@ public let kIMAGELINK = "imageLink"
 public let kRELATIONURL = "relationUrl"
 public let kDATE = "date"
 
+public let kIMAGELINKARRAY = "imageLinkArray"
 
 public let kITEMS = "Items"

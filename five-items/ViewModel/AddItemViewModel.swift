@@ -12,8 +12,12 @@ class AddItemViewModel : ObservableObject {
     
     @Published var name = ""
     @Published var url = ""
-    @Published var imageData : Data = .init(count : 0)
+//    @Published var imageData : Data = .init(count : 0)
     @Published var description = ""
+    
+    @Published var images : [Data] = []
+    @Published var imageIndex = 0
+    @Published var changeImageDictionary = [Int : Data]()
     
     @Published var editItem : Item?
     
@@ -34,7 +38,7 @@ class AddItemViewModel : ObservableObject {
         
         guard let editItem = editItem else {return false}
         
-        if editItem.name != name ||  editItem.description != description  || !(self.imageData == .init(count :0)){
+        if editItem.name != name ||  editItem.description != description  || !(changeImageDictionary.isEmpty){
             return true
         }
         
@@ -44,8 +48,11 @@ class AddItemViewModel : ObservableObject {
     
     //MARK: - Validation func
     func selectedImage() -> Bool {
-        return !(imageData == .init(count: 0))
+        
+        return images.count > 0
+//        return !(imageData == .init(count: 0))
     }
+    
     
     var validImageText : String {
         
@@ -73,6 +80,30 @@ class AddItemViewModel : ObservableObject {
        }
        return false
    }
+    
+    func disableButton(int : Int) -> Bool {
+        
+        let count = images.count
+        
+        if int <= count {
+            return false
+        } else {
+            return true
+        }
+     
+    }
+    
+    func editDisableButton(int : Int) -> Bool{
+        
+        guard let count = editItem?.imageLinks.count else {return true}
+        let imageArray = changeImageDictionary.count
+        if int <= count || int <= imageArray {
+            return false
+        } else {
+            return true
+        }
+     
+    }
     
     
     

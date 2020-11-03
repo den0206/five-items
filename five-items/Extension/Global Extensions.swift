@@ -96,7 +96,7 @@ func randomItemArray(count : Int) -> [Item] {
     
     for i in 0..<count {
         let id = UUID().uuidString
-        let item = Item(id: id , name: "\(i)", imageUrl: getExampleImageUrl(), userId: "", index: 1)
+        let item = Item(id: id , name: "\(i)", imageLinks: [], userId: "", index: 1)
 
         items.append(item)
     }

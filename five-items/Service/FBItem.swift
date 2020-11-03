@@ -8,24 +8,22 @@
 import Firebase
 import SwiftUI
 
+
 struct FBItem  {
     
-
-    static func registrationItem(index: Int,name : String, urlString : String?,imageData : Data, description : String?, userId : String ,completion :  @escaping(Result<Item, Error>) -> Void) {
+    static func registationItemMultipleImage(index: Int,name : String, urlString : String?,images : [Data], description : String?, userId : String ,completion :  @escaping(Result<Item, Error>) -> Void) {
         
         let itemId = UUID().uuidString
-        let fileName = "ItemImages/" + "\(userId)/" + "item\(index)" + ".jpg"
         
-        saveImageInFirestore(imageData: imageData, filename: fileName) { (result) in
-            
+        uploadMultipleImages(images: images, itemId: itemId, userId: userId) { (result) in
             switch result {
             
-            case .success(let imageUrl):
+            case .success(let imageLinks):
                 
                 var data = [kITEMID : itemId,
                             kITEMNAME : name,
                             kUSERID : userId,
-                            kIMAGELINK : imageUrl,
+                            kIMAGELINKARRAY : imageLinks,
                             kINDEX : index,
                             kDATE : Timestamp(date: Date())
                             
@@ -49,21 +47,16 @@ struct FBItem  {
                 guard let item = Item(dic: data) else {return}
             
                 completion(.success(item))
-            
-            case .failure(let error):
                 
+            case .failure(let error):
                 print(error.localizedDescription)
                 completion(.failure(error))
             }
         }
-
         
-         
     }
-
     
-    
-    static func editItem(vm : AddItemViewModel, user : FBUser, completion :  @escaping(Result<Item , Error>) -> Void) {
+   static func editItemWithMultipleImage(vm : AddItemViewModel, user : FBUser, completion : @escaping(Result<Item, Error>) -> Void) {
         
         guard let editItem = vm.editItem else {return}
         
@@ -71,39 +64,32 @@ struct FBItem  {
        
         let itemId = editItem.id
         
-        if vm.imageData.count != 0 {
+    if !vm.changeImageDictionary.isEmpty {
             
-            let fileName = "ItemImages/" + "\(userId)/" + "item\(editItem.index)" + ".jpg"
-            
-            
-            saveImageInFirestore(imageData: vm.imageData, filename: fileName) { (result) in
-                
+            uploadMultipleImages(imageDic: vm.changeImageDictionary, editItem: editItem, userId: userId) { (result) in
+
                 switch result {
-                case .success(let imageUrl) :
-                    
-                    FBItem.updateItem(itemId: itemId, userId: userId, vm: vm, imageUrl: imageUrl) { (resultItem) in
-                        switch resultItem {
-                        
-                        case .success(let item):
-                            completion(.success(item))
-                        case .failure(let error ):
+
+                case .success(let item):
+
+                    FBItem.updateItem(itemId: itemId, userId: userId, vm: vm, imageLinks: item.imageLinks) { (result) in
+                        switch result {
+
+                        case .success(let completeItem):
+                            completion(.success(completeItem))
+                        case .failure(let error):
                             completion(.failure(error))
                         }
                     }
-                    
                 case .failure(let error):
-                    
-                    print(error.localizedDescription)
                     completion(.failure(error))
                 }
-                
-                
             }
-        } else {
             
-            FBItem.updateItem(itemId: itemId, userId: userId, vm: vm, imageUrl: nil) { (resultItem) in
+        } else {
+            FBItem.updateItem(itemId: itemId, userId: userId, vm: vm, imageLinks: nil) { (resultItem) in
                 switch resultItem {
-                
+
                 case .success(let item):
                     completion(.success(item))
                 case .failure(let error ):
@@ -112,8 +98,10 @@ struct FBItem  {
             }
         }
     }
+
     
-    static func updateItem(itemId : String, userId : String,vm : AddItemViewModel, imageUrl : String? ,completion:  @escaping(Result<Item, Error>) -> Void) {
+    
+    static func updateItem(itemId : String, userId : String,vm : AddItemViewModel, imageLinks : [URL]? ,completion:  @escaping(Result<Item, Error>) -> Void) {
         
         var data = [kITEMID : itemId,
                     kITEMNAME : vm.name,
@@ -123,12 +111,10 @@ struct FBItem  {
                     
         ] as [String : Any]
         
-        if imageUrl != nil {
-            data[kIMAGELINK] = imageUrl!
-        } else {
-            data[kIMAGELINK] = vm.editItem!.imageUrl.absoluteString
+        if imageLinks != nil {
+            data[kIMAGELINKARRAY] = imageLinks!.map({$0.absoluteString})
         }
-        
+  
         if vm.description != "" {
             data[kDESCRIPTION] = vm.description
         }
@@ -145,8 +131,13 @@ struct FBItem  {
             }
         }
         
+        if imageLinks == nil {
+            data[kIMAGELINKARRAY] = vm.editItem?.imageLinks.map({$0.absoluteString})
+        }
+        
         guard let item = Item(dic: data) else {return}
-    
+        
+      
         completion(.success(item))
     
     }
@@ -168,18 +159,40 @@ struct FBItem  {
                 return
             }
             
-            /// delete image from storage
-            strogeRef.child("ItemImages").child(userId).child("item\(item.index).jpg").delete { (error) in
-                
+            strogeRef.child("ItemImages").child(userId).child(item.id).listAll { (result, error) in
                 if let error = error {
                     completion(.failure(error))
                     return
                 }
                 
-                print("Success Delete Item")
-                
-                completion(.success(item.index))
+                for ref in result.items {
+                    
+                    ref.delete { (error) in
+                        if let error = error {
+                            completion(.failure(error))
+                            return
+                        }
+                        
+                        print("Success Delete Item")
+                        
+                        completion(.success(item.index))
+                        
+                    }
+                }
             }
+            
+//            /// delete image from storage
+//            strogeRef.child("ItemImages").child(userId).child("item\(item.index).jpg").delete { (error) in
+//
+//                if let error = error {
+//                    completion(.failure(error))
+//                    return
+//                }
+//
+//                print("Success Delete Item")
+//
+//                completion(.success(item.index))
+//            }
 
         }
         

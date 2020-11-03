@@ -33,47 +33,24 @@ struct EditItemView: View {
             ScrollView(.vertical, showsIndicators: false, content: {
                 
                 VStack(spacing : 20) {
-
-                    HStack {
-                        Button(action: {
-                                alertType = .errorMessage
-                                vm.showPicker = true
-                            
-                        }) {
-                            if vm.imageData.count == 0 {
-                                WebImage(url: vm.editItem?.imageUrl)
-                                    .resizable()
-                                    .placeholder {
-                                        Rectangle()
-                                            .fill(Color(white: 0.95))
-                                            .frame(width: 120, height: 120)
-                                            .cornerRadius(10)
-                                            .shadow(radius: 5)
-                                            .overlay(ProgressView()
-                                            .foregroundColor(.white))
-                                    }
-                                    .frame(width: 120, height: 120)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 5)
-
-                            } else {
-                                Image(uiImage: UIImage(data: vm.imageData)!)
-                                    .resizable()
-                                    .frame(width: 120, height: 120)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 5)
-                            }
-                        }
-                    }
-                    .padding(.bottom, 30)
-                    .sheet(isPresented: $vm.showPicker) {
-                        ImagePicker(image: $vm.imageData, errorMessage: $errorMessage, showAlert: $showAlert)
-                            .alert(isPresented: $showAlert) {
-                                return Alert(title: Text("Error"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
-                                
-                            }
-                    }
                     
+                    HStack {
+                       
+                        EditImageButton(itemModel: vm, index: 0)
+                        
+                        VStack(spacing : 5) {
+                            EditImageButton(itemModel: vm, index: 1)
+                            
+                            EditImageButton(itemModel: vm, index: 2)
+                        }
+                        
+                    }
+                    .frame(width: UIScreen.main.bounds.width - 10, height: 300)
+                    .sheet(isPresented: $vm.showPicker, content: {
+                        EditItemImagePicker(images: $vm.changeImageDictionary, errorMessage: $errorMessage, showAlert: $showAlert, index: $vm.imageIndex)
+                    })
+
+
                     Spacer()
                     
                     Group {
@@ -163,9 +140,7 @@ struct EditItemView: View {
                         }
                         
                     }.padding()
-            
-                    
-                    
+  
                 }
                 
             })
@@ -201,14 +176,7 @@ extension EditItemView {
         
         vm.showLoading = true
         
-        
-        if testMode {
-            guard let imageData = imageByUrl(url: getExampleImageUrl("item")) else {print("Error");return}
-            vm.imageData = imageData
-           
-        }
-        
-        FBItem.editItem(vm: vm, user: userInfo.user) { (result) in
+        FBItem.editItemWithMultipleImage(vm: vm, user: userInfo.user) { (result) in
             
             switch result {
             
@@ -216,15 +184,15 @@ extension EditItemView {
                 userInfo.user.items[item.index] = item
                 vm.showLoading = false
                 self.presentationMode.wrappedValue.dismiss()
-
+                
             case .failure(let error):
                 vm.showLoading = false
-
+                
                 errorMessage = error.localizedDescription
                 showAlert = true
             }
         }
-  
+ 
     }
     
     func deleteItem() {
@@ -254,4 +222,136 @@ extension EditItemView {
     }
 }
 
+struct EditImageButton : View {
+    
+    @StateObject var itemModel : AddItemViewModel
+    var index : Int
 
+    
+    var body: some View {
+    
+        Button(action: {
+            itemModel.showPicker = true
+            itemModel.imageIndex = index
+        }) {
+            
+            if itemModel.changeImageDictionary[index] != nil {
+                
+                Image(uiImage: UIImage(data: itemModel.changeImageDictionary[index]!)!)
+                    .resizable()
+                    
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
+                
+            } else if itemModel.editItem != nil {
+                
+                if (itemModel.editItem?.imageLinks.count)! > index {
+                    WebImage(url: itemModel.editItem?.imageLinks[index])
+                        .resizable()
+                        .placeholder {
+                            Rectangle()
+                                .fill(Color(white: 0.95))
+                                .overlay(
+                                    ProgressView()
+                                        .foregroundColor(.black)
+                                )
+                        }
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                } else {
+                    
+                    Rectangle()
+                        .fill(!itemModel.editDisableButton(int: index) ? Color(white: 0.95) : Color(white: 0.75))
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                        .overlay(
+                            
+                            Image(systemName: "plus")
+                                .foregroundColor(.gray)
+                                .frame(width: 30, height: 30)
+                        )
+                
+               
+                }
+                
+                
+            } else {
+                
+                    Rectangle()
+                        .fill(!itemModel.editDisableButton(int: index) ? Color(white: 0.95) : Color(white: 0.75))
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                        .overlay(
+                            
+                            Image(systemName: "plus")
+                                .foregroundColor(.gray)
+                                .frame(width: 30, height: 30)
+                        )
+                
+               
+            }
+           
+            
+            
+            
+        }
+        .padding(3)
+        .disabled(itemModel.editDisableButton(int: index))
+    }
+}
+
+struct EditItemImagePicker: UIViewControllerRepresentable {
+    
+    @Environment(\.presentationMode) var presentationMode
+    @Binding var images: [Int : Data]
+    @Binding var errorMessage : String
+    @Binding var showAlert : Bool
+    @Binding var index : Int
+    
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        let parent: EditItemImagePicker
+        
+        init(_ parent: EditItemImagePicker) {
+            self.parent = parent
+        }
+        
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+            if let uiImage = info[.originalImage] as? UIImage {
+                let data = uiImage.jpegData(compressionQuality: 0.2)
+                
+                let dataToKB = Double(data!.count) / 1000.0
+                print(dataToKB)
+                
+                if dataToKB < 1000.0 {
+                    
+                    parent.images[parent.index] = data
+                    
+
+                } else {
+                    self.parent.errorMessage = "画像の容量が大きいです。"
+                    self.parent.showAlert = true
+                    return
+
+                }
+                
+                
+            }
+            
+            parent.presentationMode.wrappedValue.dismiss()
+        }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    func makeUIViewController(context: UIViewControllerRepresentableContext<EditItemImagePicker>) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.delegate = context.coordinator
+        return picker
+    }
+    
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<EditItemImagePicker>) {
+
+    }
+}
